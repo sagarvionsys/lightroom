@@ -5,8 +5,8 @@ import { ImageKitProvider } from "imagekitio-next";
 import { SessionProvider } from "next-auth/react";
 import axios from "axios";
 
-const urlEndpoint = process.env.NEXT_PUBLIC_URL_ENDPOINT!;
-const publicKey = process.env.NEXT_PUBLIC_PUBLIC_KEY!;
+const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!;
+const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!;
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const authenticator = async () => {
