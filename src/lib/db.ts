@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-const mongoDbUrl = process.env.MONGODB_URI;
+const mongoDbUrl = process.env.DB_URL!;
 
-if (!mongoDbUrl) throw new Error("MONGODB_URI is not defined");
+if (!mongoDbUrl) throw new Error("DB_URL is not defined");
 let cached = global.mongoose;
 
 if (!cached) {
@@ -12,13 +12,8 @@ const dbConnect = async () => {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    const options = {
-      bufferCommand: true,
-      maxPoolSize: 50,
-    };
-
     cached.promise = mongoose
-      .connect(mongoDbUrl, options)
+      .connect(mongoDbUrl)
       .then(() => mongoose.connection);
 
     cached.conn = await cached.promise;

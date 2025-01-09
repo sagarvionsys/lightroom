@@ -6,11 +6,17 @@ import {
   UploadError,
 } from "imagekitio-next/dist/types/components/IKUpload/props";
 
-const FileUpload = () => {
+const FileUpload = ({
+  onSuccess,
+}: {
+  onSuccess: (response: IKUploadResponse) => void;
+}) => {
   const handleError = (error: UploadError) => {
     console.log("Error in image upload", error);
   };
+
   const handleResponse = (response: IKUploadResponse) => {
+    onSuccess(response);
     console.log("Image uploaded", response);
   };
 
