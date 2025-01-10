@@ -6,13 +6,15 @@ import {
   CircleUser,
   House,
   Info,
+  LogIn,
   LogOut,
   Mail,
   ShoppingCart,
 } from "lucide-react";
 
 export function Navbar() {
-  const isLogin = true; // Change this to false to hide the account link
+  const isLogin = true;
+
   const links = [
     {
       title: "Home",
@@ -29,18 +31,18 @@ export function Navbar() {
       icon: <Mail size={28} absoluteStrokeWidth />,
       href: "contact",
     },
-    {
-      title: "Notifications",
-      icon: <BellDot size={28} absoluteStrokeWidth />,
-      href: "notifications",
-    },
-    {
-      title: "Cart",
-      icon: <ShoppingCart size={28} absoluteStrokeWidth />,
-      href: "cart",
-    },
     ...(isLogin
       ? [
+          {
+            title: "Notifications",
+            icon: <BellDot size={28} absoluteStrokeWidth />,
+            href: "notifications",
+          },
+          {
+            title: "Cart",
+            icon: <ShoppingCart size={28} absoluteStrokeWidth />,
+            href: "cart",
+          },
           {
             title: "Account",
             icon: <CircleUser size={28} absoluteStrokeWidth />,
@@ -49,10 +51,16 @@ export function Navbar() {
           {
             title: "LogOut",
             icon: <LogOut size={28} absoluteStrokeWidth />,
-            href: "account",
+            href: "sign-out",
           },
         ]
-      : []),
+      : [
+          {
+            title: "Login",
+            icon: <LogIn size={28} absoluteStrokeWidth />,
+            href: "sign-in",
+          },
+        ]),
   ];
 
   return (
