@@ -15,7 +15,7 @@ interface PopulatedProduct {
 export interface IOrder {
   _id?: mongoose.Types.ObjectId;
   userId: mongoose.Types.ObjectId | PopulatedUser;
-  productId: mongoose.Types.ObjectId | PopulatedProduct;
+  productId: mongoose.Types.ObjectId | PopulatedProduct | string;
   variant: ImageVariant;
   razorpayOrderId: string;
   razorpayPaymentId?: string;

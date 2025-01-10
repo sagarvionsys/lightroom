@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-const useQueryFunction = (query: string[], fn: () => Promise<any>) => {
+export const useQueryFunction = (query: string[], fn: () => Promise<any>) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: query,
     queryFn: fn,
@@ -9,4 +9,15 @@ const useQueryFunction = (query: string[], fn: () => Promise<any>) => {
   return { data, isLoading, isError };
 };
 
-export default useQueryFunction;
+export const useQueryFunctionWithId = (
+  query: string[],
+  id: string,
+  fn: (id: string) => Promise<any>
+) => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: query,
+    queryFn: () => fn(id),
+  });
+
+  return { data, isLoading, isError };
+};

@@ -9,6 +9,7 @@ import {
   LogIn,
   LogOut,
   Mail,
+  ShoppingBag,
   ShoppingCart,
 } from "lucide-react";
 
@@ -39,9 +40,9 @@ export function Navbar() {
             href: "notifications",
           },
           {
-            title: "Cart",
-            icon: <ShoppingCart size={28} absoluteStrokeWidth />,
-            href: "cart",
+            title: "Bag",
+            icon: <ShoppingBag size={28} absoluteStrokeWidth />,
+            href: "bag",
           },
           {
             title: "Account",
