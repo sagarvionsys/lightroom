@@ -4,17 +4,30 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { signIn } from "next-auth/react";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const SignInForm = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = {
-      firstName: formData.get("firstName")?.toString() || "",
       email: formData.get("email")?.toString() || "",
       password: formData.get("password")?.toString() || "",
     };
-    console.log("Form submitted with data:", data);
+    const result = await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: false,
+    });
+    if (result?.error) toast.error(result.error);
+    if (result?.ok) {
+      toast.success("Login successful");
+      router.push("/");
+    }
   };
 
   return (
@@ -24,17 +37,6 @@ const SignInForm = () => {
       </h2>
 
       <form className="my-8" onSubmit={handleSubmit}>
-        <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
-          <LabelInputContainer>
-            <Label htmlFor="firstName">First name</Label>
-            <Input
-              id="firstName"
-              name="firstName"
-              placeholder="Tyler"
-              type="text"
-            />
-          </LabelInputContainer>
-        </div>
         <LabelInputContainer className="mb-4">
           <Label htmlFor="email">Email Address</Label>
           <Input

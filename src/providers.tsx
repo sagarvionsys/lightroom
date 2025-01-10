@@ -5,6 +5,7 @@ import { ImageKitProvider } from "imagekitio-next";
 import { SessionProvider } from "next-auth/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
+import { Navbar } from "./components/Navbar";
 
 const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!;
 const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!;
@@ -47,6 +48,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           urlEndpoint={urlEndpoint}
           authenticator={authenticator}
         >
+          <Navbar />
           {children}
         </ImageKitProvider>
       </QueryClientProvider>

@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 const SignUpForm = () => {
   const { register, registerLoading } = useRegister();
   const router = useRouter();
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -33,21 +34,21 @@ const SignUpForm = () => {
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
-            <Label htmlFor="firstName">First name</Label>
+            <Label htmlFor="userName">User name</Label>
             <Input
-              id="firstName"
-              name="firstName"
+              id="userName"
+              name="userName"
               placeholder="Tyler"
               type="text"
             />
           </LabelInputContainer>
         </div>
         <LabelInputContainer className="mb-4">
-          <Label htmlFor="email">Email Address</Label>
+          <Label htmlFor="email">Email</Label>
           <Input
             id="email"
             name="email"
-            placeholder="projectmayhem@fc.com"
+            placeholder="example@abc.com"
             type="email"
           />
         </LabelInputContainer>
