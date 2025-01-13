@@ -42,10 +42,12 @@ export async function POST(rea: NextRequest) {
       status: "pending",
     });
 
-    return NextResponse.json(
-      { newOrder, razorPayOrder: order },
-      { status: 201 }
-    );
+    return NextResponse.json({
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      dbOrderId: newOrder._id,
+    });
   } catch (error) {
     console.log("API Error at api/orders:POST", error);
     return NextResponse.json(

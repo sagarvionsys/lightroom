@@ -18,8 +18,8 @@ export default withAuth(
         // Allow auth-related routes
         if (
           pathname.startsWith("/api/auth") ||
-          pathname === "/login" ||
-          pathname === "/register"
+          pathname === "/sign-in" ||
+          pathname === "/sign-up"
         ) {
           return true;
         }
@@ -35,12 +35,11 @@ export default withAuth(
 
         // Admin routes require admin role
         if (pathname.startsWith("/admin")) {
-          return true;
+          return token?.role === "admin";
         }
 
         // All other routes require authentication
-        // return !!token;
-        return true;
+        return !!token;
       },
     },
   }

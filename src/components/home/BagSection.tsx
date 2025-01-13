@@ -1,12 +1,10 @@
 import { IMAGE_VARIANTS } from "@/types/product.types";
 import { IKImage } from "imagekitio-next";
-import { Download } from "lucide-react";
+import { Download, RefreshCcwDotIcon } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/moving-border";
 
 const BagSection = ({ items }: any) => {
-  console.log("\ud83d\ude80 ~ BagSection ~ items:", items);
-
   return (
     <div className="container mx-auto px-4 py-8 bg-base-100">
       <h1 className="text-4xl font-bold mb-8 text-primary-content text-center">
@@ -121,7 +119,13 @@ const BagSection = ({ items }: any) => {
                         )}
                         {order.status !== "completed" && (
                           <p className="text-sm text-neutral-400">
-                            {order.status}
+                            <Button
+                              borderRadius="0.5rem"
+                              className="bg-slate-900 gap-3 flex text-white border-slate-600"
+                            >
+                              <RefreshCcwDotIcon />
+                              refresh
+                            </Button>
                           </p>
                         )}
                       </div>

@@ -2,6 +2,7 @@
 
 import useAddOrder from "@/features/orderMutations/useAddOrder";
 import { useQueryFunctionWithId } from "@/features/useQuery";
+import { addOrderApi } from "@/services/orderApi";
 import { getProductApiById } from "@/services/productApi";
 import {
   IMAGE_VARIANTS,
@@ -13,6 +14,7 @@ import { Check, ImageIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 export const getTransformation = (variantType: ImageVariantType) => {
   const { dimensions } = IMAGE_VARIANTS[variantType];
@@ -34,7 +36,7 @@ const Product = () => {
     id as string,
     getProductApiById
   );
-  const { addOrder, addOrderLoading, orderData } = useAddOrder();
+
   const { data: session } = useSession();
   const [selectedVariant, setSelectedVariant] = useState<ImageVariant | null>(
     null
@@ -52,20 +54,20 @@ const Product = () => {
     }
 
     try {
-      await addOrder({
+      const data = await addOrderApi({
         productId: productData?._id,
         variant,
       });
 
-      const { orderId, amount } = orderData;
+      const { orderId, amount } = data;
       const rzpOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(variant.price * 100),
+        amount: amount,
         currency: "INR",
         name: "LightRoom Shop",
         description: `${productData?.name} - ${variant?.type} Version`,
         order_id: orderId,
-        handler: () => console.log("Payment successful!"),
+        handler: () => toast.success("Payment successful!"),
         prefill: {
           email: session.user.email,
         },
@@ -75,6 +77,7 @@ const Product = () => {
       rzp.open();
     } catch (error) {
       console.error("Purchase failed:", error);
+      toast.error("Purchase failed. Please try again.");
     }
   };
 
@@ -186,7 +189,7 @@ const VariantSelection = ({
 }) => (
   <div className="space-y-4">
     <h2 className="text-xl font-semibold text-white">Available Versions</h2>
-    {variants.map((variant) => (
+    {variants?.map((variant) => (
       <div
         key={variant.type}
         className={`card bg-neutral-800 border border-gray-700 rounded-lg cursor-pointer transition-transform transform ${

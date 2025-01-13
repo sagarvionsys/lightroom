@@ -10,11 +10,12 @@ import {
   LogOut,
   Mail,
   ShoppingBag,
-  ShoppingCart,
 } from "lucide-react";
+import { signOut, useSession } from "next-auth/react";
 
 export function Navbar() {
-  const isLogin = true;
+  const { data: session } = useSession();
+  const isLogin = session?.user;
 
   const links = [
     {
@@ -49,11 +50,6 @@ export function Navbar() {
             icon: <CircleUser size={28} absoluteStrokeWidth />,
             href: "/account",
           },
-          {
-            title: "LogOut",
-            icon: <LogOut size={28} absoluteStrokeWidth />,
-            href: "sign-out",
-          },
         ]
       : [
           {
@@ -67,6 +63,12 @@ export function Navbar() {
   return (
     <div className="flex items-center justify-center h-[8rem] w-full">
       <FloatingDock items={links} />
+
+      <div className="group relative p-6">
+        <button onClick={() => signOut()}>
+          <LogOut />
+        </button>
+      </div>
     </div>
   );
 }
