@@ -37,17 +37,17 @@ export function Navbar() {
           {
             title: "Notifications",
             icon: <BellDot size={28} absoluteStrokeWidth />,
-            href: "notifications",
+            href: "/notifications",
           },
           {
             title: "Bag",
             icon: <ShoppingBag size={28} absoluteStrokeWidth />,
-            href: "bag",
+            href: "/bag",
           },
           {
             title: "Account",
             icon: <CircleUser size={28} absoluteStrokeWidth />,
-            href: "account",
+            href: "/account",
           },
           {
             title: "LogOut",
@@ -59,7 +59,7 @@ export function Navbar() {
           {
             title: "Login",
             icon: <LogIn size={28} absoluteStrokeWidth />,
-            href: "sign-in",
+            href: "/sign-in",
           },
         ]),
   ];

@@ -14,6 +14,19 @@ import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
 
+export const getTransformation = (variantType: ImageVariantType) => {
+  const { dimensions } = IMAGE_VARIANTS[variantType];
+  return [
+    {
+      width: dimensions?.width.toString(),
+      height: dimensions?.height.toString(),
+      cropMode: "extract",
+      focus: "center",
+      quality: "80",
+    },
+  ];
+};
+
 const Product = () => {
   const { id } = useParams();
   const { data: product, isLoading: productLoading } = useQueryFunctionWithId(
@@ -31,19 +44,6 @@ const Product = () => {
   if (!product) return <LoadingMessage text="Product not found" />;
 
   const { product: productData } = product;
-
-  const getTransformation = (variantType: ImageVariantType) => {
-    const { dimensions } = IMAGE_VARIANTS[variantType];
-    return [
-      {
-        width: dimensions?.width.toString(),
-        height: dimensions?.height.toString(),
-        cropMode: "extract",
-        focus: "center",
-        quality: "80",
-      },
-    ];
-  };
 
   const handlePurchase = async (variant: ImageVariant) => {
     if (!session) {
