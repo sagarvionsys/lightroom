@@ -4,10 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, password } = await req.json();
-    if (!email || !password)
+    const { email, password, userName } = await req.json();
+    if (!email || !password || !userName)
       return NextResponse.json(
-        { error: "Email and password are required" },
+        { error: "Email, password and userName are required" },
         { status: 400 }
       );
 
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
 
-    const newUser = await User.create({ email, password });
+    const newUser = await User.create({ email, password, userName });
 
     return NextResponse.json(
       { message: "User created successfully", newUser },
