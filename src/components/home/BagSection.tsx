@@ -1,6 +1,6 @@
 import { IMAGE_VARIANTS } from "@/types/product.types";
 import { IKImage } from "imagekitio-next";
-import { Download, RefreshCcwDotIcon } from "lucide-react";
+import { Download } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/moving-border";
 
@@ -11,9 +11,9 @@ const BagSection = ({ items }: any) => {
         My Orders
       </h1>
 
-      <div className="space-y-8">
+      <div className="space-y-4">
         {items &&
-          items.map((order: any) => {
+          items?.map((order: any) => {
             const variantDimensions =
               IMAGE_VARIANTS[
                 order.variant.type.toUpperCase() as keyof typeof IMAGE_VARIANTS
@@ -116,17 +116,6 @@ const BagSection = ({ items }: any) => {
                               Download
                             </Button>
                           </a>
-                        )}
-                        {order.status !== "completed" && (
-                          <p className="text-sm text-neutral-400">
-                            <Button
-                              borderRadius="0.5rem"
-                              className="bg-slate-900 gap-3 flex text-white border-slate-600"
-                            >
-                              <RefreshCcwDotIcon />
-                              refresh
-                            </Button>
-                          </p>
                         )}
                       </div>
                     </div>

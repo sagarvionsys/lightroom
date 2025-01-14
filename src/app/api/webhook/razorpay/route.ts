@@ -3,7 +3,6 @@ import crypto from "crypto";
 import dbConnect from "@/lib/db";
 import Order from "@/models/order.model";
 
-// can add mail to user on successful payment
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -17,19 +16,28 @@ export async function POST(req: NextRequest) {
     if (expectedSignature !== signature)
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
 
-    const event = JSON.parse(body);
+    const event = body;
     await dbConnect();
 
     if (event.event === "payment.captured") {
       const payment = event.payload.payment.entity;
-      const order = await Order.findOneAndUpdate(
+      await Order.findOneAndUpdate(
         { razorpayPaymentId: payment.Order_id },
         { razorpayOrderId: payment.id, status: "completed" }
-      ).populate([
-        { path: "productId", select: "name imageUrl" },
-        { path: "userId", select: "email" },
-      ]);
+      );
     }
+    if (event.event === "payment.failed") {
+      const payment = event.payload.payment.entity;
+      await Order.findOneAndUpdate(
+        { razorpayPaymentId: payment.Order_id },
+        { razorpayOrderId: payment.id, status: "failed" }
+      );
+    }
+
+    return NextResponse.json(
+      { message: "success", status: "ok" },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("API Error at api/webhook/razorpay:POST", error);
     return new Response("Internal server error", { status: 500 });
