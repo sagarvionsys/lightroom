@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import dbConnect from "@/lib/db";
 import Order from "@/models/order.model";
+import { failedEmailTemplate, successEmailTemplate } from "@/mail/templates";
+import sendMail from "@/mail";
 
 export async function POST(req: NextRequest) {
   try {
@@ -29,7 +31,29 @@ export async function POST(req: NextRequest) {
         { path: "userId", select: "userName email" },
         { path: "productId", select: "name" },
       ]);
-      console.log(order);
+
+      await sendMail({
+        to: order.userId.email,
+        subject: "Your Payment Was Successful! 🎉",
+        html: successEmailTemplate(order),
+      });
+    }
+
+    // payment failed method
+    if (event.event === "payment.failed") {
+      const payment = event.payload.payment.entity;
+      const order = await Order.findOneAndUpdate(
+        { razorpayOrderId: payment.order_id },
+        { razorpayPaymentId: payment.id, status: "failed" }
+      ).populate([
+        { path: "userId", select: "userName email" },
+        { path: "productId", select: "name" },
+      ]);
+      await sendMail({
+        to: order.userId.email,
+        subject: "Your Payment Was Failed! 😢",
+        html: failedEmailTemplate(order),
+      });
     }
 
     return NextResponse.json(

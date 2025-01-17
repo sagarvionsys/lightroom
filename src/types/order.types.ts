@@ -4,6 +4,7 @@ import { ImageVariant } from "./product.types";
 interface PopulatedUser {
   _id: mongoose.Types.ObjectId;
   email: string;
+  userName: string;
 }
 
 interface PopulatedProduct {
