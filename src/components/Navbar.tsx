@@ -64,11 +64,13 @@ export function Navbar() {
     <div className="flex items-center justify-center h-[8rem] w-full">
       <FloatingDock items={links} />
 
-      <div className="group relative p-6">
-        <button onClick={() => signOut()}>
-          <LogOut />
-        </button>
-      </div>
+      {isLogin && (
+        <div className="group relative p-6">
+          <button onClick={() => signOut()}>
+            <LogOut />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,3 +1,4 @@
+"use client";
 import { IMAGE_VARIANTS } from "@/types/product.types";
 import { IKImage } from "imagekitio-next";
 import { Download } from "lucide-react";
@@ -23,7 +24,7 @@ const BagSection = ({ items }: any) => {
 
             return (
               <div
-                key={order._id?.toString()}
+                key={order._id}
                 className="card bg-neutral-900 text-neutral-content rounded-xl shadow-lg"
               >
                 <div className="card-body">
@@ -92,13 +93,16 @@ const BagSection = ({ items }: any) => {
                           <h2 className="text-2xl font-bold text-primary-content">
                             {product.name}
                           </h2>
+                          <h2 className="text-2xl font-bold text-primary-content">
+                            {product.razorpayOrderId}
+                          </h2>
                           <p className="text-sm text-neutral-400">
                             Resolution: {variantDimensions.width} x{" "}
                             {variantDimensions.height}
                           </p>
                         </div>
 
-                        {order.status === "completed" && (
+                        {order?.status === "completed" && (
                           <a
                             href={`${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}/tr:q-100,w-${variantDimensions.width},h-${variantDimensions.height},cm-extract,fo-center/${product.imageUrl}`}
                             target="_blank"

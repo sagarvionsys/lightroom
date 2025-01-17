@@ -38,7 +38,7 @@ export async function POST(rea: NextRequest) {
       productId,
       variant,
       razorpayOrderId: order.id,
-      amount: Math.round(variant.price * 100),
+      amount: variant.price,
       status: "pending",
     });
 

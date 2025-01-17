@@ -23,24 +23,13 @@ export async function POST(req: NextRequest) {
     if (event.event === "payment.captured") {
       const payment = event.payload.payment.entity;
       const order = await Order.findOneAndUpdate(
-        { razorpayPaymentId: payment.Order_id },
-        { razorpayOrderId: payment.id, status: "completed" }
+        { razorpayOrderId: payment.order_id },
+        { razorpayPaymentId: payment.id, status: "completed" }
       ).populate([
         { path: "userId", select: "userName email" },
         { path: "productId", select: "name" },
       ]);
-    }
-
-    // payment failed method
-    if (event.event === "payment.failed") {
-      const payment = event.payload.payment.entity;
-      const order = await Order.findOneAndUpdate(
-        { razorpayPaymentId: payment.Order_id },
-        { razorpayOrderId: payment.id, status: "failed" }
-      ).populate([
-        { path: "userId", select: "userName email" },
-        { path: "productId", select: "name" },
-      ]);
+      console.log(order);
     }
 
     return NextResponse.json(
