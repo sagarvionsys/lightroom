@@ -1,13 +1,17 @@
 "use client";
 
+import useDeleteCartItem from "@/features/cartMutations/useDeleteCartItem";
 import { ICart } from "@/types/cart.types";
 import { IMAGE_VARIANTS } from "@/types/product.types";
 import { IKImage } from "imagekitio-next";
+import { CircleMinus, CirclePlus, Heart, Trash2 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import Spinner from "../Spinner";
+import { toINR } from "@/utils/converteToINR";
 
 const CartCard = ({ product }: { product: ICart }) => {
-  console.log(product);
+  const { deleteItem, deleteItemPending } = useDeleteCartItem();
   const variantDimensions =
     IMAGE_VARIANTS[
       product.variant.type.toUpperCase() as keyof typeof IMAGE_VARIANTS
@@ -49,23 +53,9 @@ const CartCard = ({ product }: { product: ICart }) => {
               type="button"
               id="decrement-button"
               data-input-counter-decrement="counter-input"
-              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-600 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-700"
+              className="inline-flex h-5 w-5 items-center justify-center"
             >
-              <svg
-                className="h-2.5 w-2.5 text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 2"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M1 1h16"
-                />
-              </svg>
+              <CircleMinus />
             </button>
             <input
               type="text"
@@ -73,35 +63,21 @@ const CartCard = ({ product }: { product: ICart }) => {
               data-input-counter
               className="w-10 shrink-0 border-0 bg-transparent text-center text-sm font-medium text-white focus:outline-none focus:ring-0"
               placeholder=""
-              value="2"
+              value="1"
               required
             />
             <button
               type="button"
               id="increment-button"
               data-input-counter-increment="counter-input"
-              className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-gray-600 bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-700"
+              className="inline-flex h-5 w-5 shrink-0 items-center justify-center"
             >
-              <svg
-                className="h-2.5 w-2.5 text-white"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 18"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M9 1v16M1 9h16"
-                />
-              </svg>
+              <CirclePlus />
             </button>
           </div>
           <div className="text-end md:order-4 md:w-32">
             <p className="text-base font-bold text-white">
-              {product.variant.price}
+              {toINR(product.variant.price)}
             </p>
           </div>
         </div>
@@ -120,50 +96,28 @@ const CartCard = ({ product }: { product: ICart }) => {
           <div className="flex items-center gap-4">
             <button
               type="button"
-              className="inline-flex items-center text-sm font-medium text-gray-400 hover:text-white hover:underline"
+              className="inline-flex items-center text-sm font-medium text-gray-400  hover:underline"
             >
-              <svg
-                className="me-1.5 h-5 w-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z"
-                />
-              </svg>
-              Add to Favorites
+              <span className="flex justify-center items-center">
+                <Heart className="p-1" />
+                <span> Add to Favorites</span>
+              </span>
             </button>
 
             <button
+              disabled={deleteItemPending}
+              onClick={() => deleteItem(product?._id)}
               type="button"
-              className="inline-flex items-center text-sm font-medium text-red-500 hover:underline"
+              className="inline-flex items-center text-sm font-medium text-red-500 "
             >
-              <svg
-                className="me-1.5 h-5 w-5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18 17.94 6M18 18 6.06 6"
-                />
-              </svg>
-              Remove
+              {deleteItemPending ? (
+                <Spinner />
+              ) : (
+                <span className="flex justify-center items-center">
+                  <Trash2 color="red" className="p-1" />
+                  <span>Remove</span>
+                </span>
+              )}
             </button>
           </div>
         </div>

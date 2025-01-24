@@ -10,6 +10,7 @@ import React from "react";
 
 const cart = () => {
   const { data: session } = useSession();
+
   const id = session?.user.id;
   const { data, isLoading } = useQueryFunctionWithId(
     ["cart"],

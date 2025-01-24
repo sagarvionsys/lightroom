@@ -57,7 +57,7 @@ const Product = () => {
       console.error("User is not logged in.");
       return;
     }
-    if (!selectedVariant) toast.error("please select variant");
+
     if (selectedVariant)
       try {
         const data = await addOrderApi({
@@ -92,7 +92,6 @@ const Product = () => {
       console.error("User is not logged in.");
       return;
     }
-    if (!selectedVariant) toast.error("please select variant");
 
     if (selectedVariant)
       addItemToCart({ productId: productData?._id, variant: selectedVariant });

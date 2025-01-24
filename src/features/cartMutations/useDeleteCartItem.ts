@@ -1,24 +1,23 @@
-import { addToCartApi, addToCartProps } from "@/services/cartApi";
+import { deleteCartItem } from "@/services/cartApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-const useItemToCart = () => {
+const useDeleteCartItem = () => {
   const queryClient = useQueryClient();
   const { mutate, isPending, isError } = useMutation({
-    mutationFn: ({ productId, variant }: addToCartProps) =>
-      addToCartApi({ productId, variant }),
+    mutationFn: (id: string) => deleteCartItem(id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
-      toast.success("item added successfully!");
+      toast.success("cart item deleted successfully!");
     },
     onError: (err) => toast.error(err.response.data.error),
   });
   return {
-    addItemToCart: mutate,
-    addItemToPending: isPending,
-    addItemToCartError: isError,
+    deleteItem: mutate,
+    deleteItemPending: isPending,
+    deleteItemError: isError,
   };
 };
 
-export default useItemToCart;
+export default useDeleteCartItem;
