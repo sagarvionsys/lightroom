@@ -10,6 +10,7 @@ import {
   LogOut,
   Mail,
   ShoppingBag,
+  ShoppingCart,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 
@@ -39,6 +40,11 @@ export function Navbar() {
             title: "Notifications",
             icon: <BellDot size={28} absoluteStrokeWidth />,
             href: "/notifications",
+          },
+          {
+            title: "cart",
+            icon: <ShoppingCart size={28} absoluteStrokeWidth />,
+            href: "/cart",
           },
           {
             title: "Bag",

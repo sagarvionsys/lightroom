@@ -49,7 +49,7 @@ const BagSection = ({ items }: any) => {
                       <p className="font-semibold text-sm text-neutral-400">
                         Total Amount
                       </p>
-                      <p className="text-lg">${order?.amount / 100}</p>
+                      <p className="text-lg">${order?.amount}</p>
                     </div>
                     <div className="flex flex-col">
                       <p className="font-semibold text-sm text-neutral-400">
