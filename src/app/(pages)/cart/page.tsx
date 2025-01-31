@@ -1,16 +1,14 @@
 "use client";
 
 import CartCard from "@/components/cart/CartCard";
-import CheckOut from "@/components/cart/CheckOut";
+import Spinner from "@/components/Spinner";
 import { useQueryFunctionWithId } from "@/features/useQuery";
 import { getCartItems } from "@/services/cartApi";
-import { ICart } from "@/types/cart.types";
 import { useSession } from "next-auth/react";
 import React from "react";
 
-const cart = () => {
+const Cart = () => {
   const { data: session } = useSession();
-
   const id = session?.user.id;
   const { data, isLoading } = useQueryFunctionWithId(
     ["cart"],
@@ -19,30 +17,42 @@ const cart = () => {
   );
 
   if (isLoading)
-    return <h1 className="text-center text-xl text-gray-300">Loading...</h1>;
-  const { cartItems } = data;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner />
+      </div>
+    );
+
+  const { cartItems } = data || {};
 
   return (
-    <section className="py-4 antialiased bg-dark ">
-      <div className="mx-auto max-w-screen-xl px-4 2xl:px-0">
-        <h2 className="text-xl font-semibold text-white sm:text-2xl">
+    <section className="py-8 ">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-2xl font-bold text-white sm:text-3xl mb-6 text-center">
           Shopping Cart
         </h2>
-        {/* shopping cart card */}
-        <div className="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
-          <div className="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-            <div className="space-y-6">
-              {cartItems &&
-                cartItems?.map((p: ICart, index: number) => (
-                  <CartCard key={index} product={p} />
-                ))}
+
+        {cartItems?.length > 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Cart Items */}
+            <div className="lg:col-span-2 space-y-6">
+              {cartItems.map((item: any, index: number) => (
+                <CartCard
+                  key={index}
+                  variant={item?.variant}
+                  product={item?.productId}
+                />
+              ))}
             </div>
           </div>
-          <CheckOut product={cartItems} />
-        </div>
+        ) : (
+          <div className="text-center text-gray-400 text-lg">
+            Your cart is empty. <br /> Start adding some products!
+          </div>
+        )}
       </div>
     </section>
   );
 };
 
-export default cart;
+export default Cart;

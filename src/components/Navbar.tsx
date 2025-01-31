@@ -5,11 +5,8 @@ import {
   BellDot,
   CircleUser,
   House,
-  Info,
   LogIn,
   LogOut,
-  Mail,
-  ShoppingBag,
   ShoppingCart,
 } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
@@ -24,16 +21,6 @@ export function Navbar() {
       icon: <House size={28} absoluteStrokeWidth />,
       href: "/",
     },
-    {
-      title: "About",
-      icon: <Info size={28} absoluteStrokeWidth />,
-      href: "about",
-    },
-    {
-      title: "Contact",
-      icon: <Mail size={28} absoluteStrokeWidth />,
-      href: "contact",
-    },
     ...(isLogin
       ? [
           {
@@ -45,11 +32,6 @@ export function Navbar() {
             title: "cart",
             icon: <ShoppingCart size={28} absoluteStrokeWidth />,
             href: "/cart",
-          },
-          {
-            title: "Bag",
-            icon: <ShoppingBag size={28} absoluteStrokeWidth />,
-            href: "/bag",
           },
           {
             title: "Account",

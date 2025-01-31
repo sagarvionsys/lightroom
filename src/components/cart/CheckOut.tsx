@@ -1,6 +1,5 @@
 "use client";
 
-import { ICart } from "@/types/cart.types";
 import { toINR } from "@/utils/converteToINR";
 import React, { useState } from "react";
 import _ from "lodash";
@@ -8,37 +7,85 @@ import { MoveRight, X } from "lucide-react";
 import Link from "next/link";
 import useVerifyVoucher from "@/features/voucherMutations/useVerifyVoucher";
 import Spinner from "../Spinner";
+import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
+import { addOrderApi } from "@/services/orderApi";
 
-const CheckOut = ({ product }: { product: ICart[] }) => {
+const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
+  const { data: session } = useSession();
   const { verifyVoucher, verifyVoucherPending } = useVerifyVoucher();
+
+  const totalBill = variant?.price || 0;
 
   const [voucherName, setVoucherName] = useState<string>("");
   const [voucherAmount, setVoucherAmount] = useState<number>(0);
+  const [totalAmount, setTotalAmount] = useState<number>(totalBill);
 
-  const totalBill = _.sumBy(product, (item) => item?.variant?.price);
-
+  // Handle verifying voucher
   const handleVoucher = (data: FormData) => {
     const code = data.get("voucher") as string;
     verifyVoucher(code, {
       onSuccess: (res) => {
-        setVoucherName(res.voucher.name);
-        setVoucherAmount(res.voucher.amount);
+        const { name, amount } = res.voucher;
+        setVoucherName(name);
+        setVoucherAmount(amount);
+        setTotalAmount(totalBill - amount);
       },
     });
   };
 
+  // Handle resetting voucher
   const resetVoucher = () => {
     setVoucherName("");
     setVoucherAmount(0);
+    setTotalAmount(totalBill);
+  };
+
+  // Handle purchase action
+  const handlePurchase = async () => {
+    if (!session) {
+      console.error("User is not logged in.");
+      return;
+    }
+
+    if (variant)
+      try {
+        const data = await addOrderApi({
+          productId: product?._id,
+          variant: variant,
+        });
+
+        const { orderId, amount } = data;
+        const rzpOptions = {
+          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+          amount: amount,
+          currency: "INR",
+          name: "LightRoom Shop",
+          description: `${product?.name} - ${variant?.type} Version`,
+          order_id: orderId,
+          handler: () => toast.success("Payment successful!"),
+          prefill: {
+            email: session.user.email,
+          },
+        };
+
+        const rzp = new (window as any).Razorpay(rzpOptions);
+        rzp.open();
+      } catch (error) {
+        console.error("Purchase failed:", error);
+        toast.error("Purchase failed. Please try again.");
+      }
   };
 
   return (
     <div className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
+      {/* Order Summary Section */}
       <div className="space-y-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-sm sm:p-6">
         <p className="text-xl font-semibold text-white">Order summary</p>
 
         <div className="space-y-4">
           <div className="space-y-2">
+            {/* Original Price */}
             <dl className="flex items-center justify-between gap-4">
               <dt className="text-base font-normal text-gray-400">
                 Original price
@@ -48,6 +95,7 @@ const CheckOut = ({ product }: { product: ICart[] }) => {
               </dd>
             </dl>
 
+            {/* Voucher Information */}
             {voucherName && (
               <dl className="flex items-center justify-between gap-4">
                 <dt className="text-base font-normal text-gray-400">Voucher</dt>
@@ -65,6 +113,7 @@ const CheckOut = ({ product }: { product: ICart[] }) => {
               </dl>
             )}
 
+            {/* Savings */}
             <dl className="flex items-center justify-between gap-4">
               <dt className="text-base font-normal text-gray-400">Savings</dt>
               <dd className="text-base font-medium text-green-600">
@@ -73,26 +122,29 @@ const CheckOut = ({ product }: { product: ICart[] }) => {
             </dl>
           </div>
 
+          {/* Total */}
           <dl className="flex items-center justify-between gap-4 border-t border-gray-700 pt-2">
             <dt className="text-base font-bold text-white">Total</dt>
             <dd className="text-base font-bold text-white">
-              {toINR(totalBill - voucherAmount)}
+              {toINR(totalAmount)}
             </dd>
           </dl>
         </div>
 
-        <a
-          href="#"
+        {/* Checkout Button */}
+        <button
+          onClick={handlePurchase}
           className="flex w-full items-center justify-center rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-800"
         >
           Proceed to Checkout
-        </a>
+        </button>
 
+        {/* Continue Shopping */}
         <div className="flex items-center justify-center gap-2">
           <span className="text-sm font-normal text-gray-400"> or </span>
           <Link
             href={"/"}
-            title=""
+            title="Continue Shopping"
             className="inline-flex items-center gap-2 text-sm font-medium text-primary-500 underline hover:no-underline"
           >
             Continue Shopping
@@ -101,6 +153,7 @@ const CheckOut = ({ product }: { product: ICart[] }) => {
         </div>
       </div>
 
+      {/* Voucher Section */}
       <div className="space-y-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-sm sm:p-6">
         <form
           className="space-y-4"
@@ -110,6 +163,7 @@ const CheckOut = ({ product }: { product: ICart[] }) => {
             handleVoucher(data);
           }}
         >
+          {/* Voucher Input */}
           <div>
             <label className="mb-2 block text-sm font-medium text-white">
               Do you have a voucher or gift card?
@@ -123,6 +177,8 @@ const CheckOut = ({ product }: { product: ICart[] }) => {
               required
             />
           </div>
+
+          {/* Apply Code Button */}
           <button
             disabled={verifyVoucherPending}
             type="submit"
