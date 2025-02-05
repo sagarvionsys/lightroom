@@ -46,19 +46,19 @@ export default function ProductCard({ product }: { product: IProduct }) {
       </figure>
 
       {/* Body Section */}
-      <div className="card-body p-6 flex gap-6">
+      <div className="card-body p-2 flex gap-6">
         <Link
           href={`/product/${product._id}`}
           className="hover:opacity-80 transition-opacity"
         >
-          <h2 className="card-title text-2xl font-semibold mb-2">
+          <h2 className="card-title text-l font-semibold mb-2">
             {product.name}
           </h2>
         </Link>
 
         <div className="flex justify-between items-center">
           <div className="flex flex-col">
-            <span className="text-lg font-bold text-yellow-400">
+            <span className="text-md font-bold text-yellow-400">
               From Rs. {lowestPrice.toFixed(2)}
             </span>
             <span className="text-xs text-gray-500">

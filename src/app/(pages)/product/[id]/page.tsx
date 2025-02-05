@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { Modal, Button } from "antd";
 import CheckOut from "@/components/cart/CheckOut";
 import ItemPreview from "@/components/cart/ItemPreview";
+import { ProductSkeleton } from "@/components/Skeletons";
 
 const getTransformation = (variantType: ImageVariantType) => {
   const { dimensions } = IMAGE_VARIANTS[variantType];
@@ -46,9 +47,8 @@ const Product = () => {
     null
   );
 
-  if (productLoading)
-    return <h1 className="text-center text-xl text-gray-300">Loading...</h1>;
-  if (!product)
+  if (productLoading) return <ProductSkeleton />;
+  if (!product && !productLoading)
     return (
       <h1 className="text-center text-xl text-gray-300">Product not found</h1>
     );
