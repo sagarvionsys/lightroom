@@ -16,7 +16,7 @@ const SignUpForm = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data: IRegisterUser = {
-      userName: formData.get("firstName")?.toString() || "",
+      userName: formData.get("userName")?.toString() || "",
       email: formData.get("email")?.toString() || "",
       password: formData.get("password")?.toString() || "",
     };

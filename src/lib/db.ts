@@ -16,10 +16,12 @@ const dbConnect = async () => {
       .connect(mongoDbUrl)
       .then(() => mongoose.connection);
 
+    console.log("DB connected");
     cached.conn = await cached.promise;
   }
   try {
     cached.conn = await cached.promise;
+    console.log("DB Already connected");
   } catch (error) {
     cached.promise = null;
   }

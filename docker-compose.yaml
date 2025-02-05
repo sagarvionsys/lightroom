@@ -1,0 +1,54 @@
+services:
+  # app:
+  #   build: .
+  #   container_name: light-room-app
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - mongodb
+  #   restart: unless-stopped
+  #   volumes:
+  #     - .:/app:cached # bind mount
+  #     - /app/node_modules # anonymous volume
+  #   env_file:
+  #     - .env.local
+  #   environment:
+  #     DB_URL: "mongodb://root:example@mongodb:27017/lightRoom?authSource=admin"
+
+  mongodb:
+    image: mongo:noble
+    container_name: light-room-mongodb
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    volumes:
+      - mongodb-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=example
+
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 1m
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: light-room-mongo-express
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+    depends_on:
+      - mongodb
+
+volumes:
+  mongodb-data:
+    driver: local
