@@ -21,7 +21,7 @@ const Cart = () => {
 
   if (!cartItems && !isLoading)
     return (
-      <h1 className="text-center text-xl text-gray-300">Product not found</h1>
+      <h1 className="text-center text-xl text-gray-300">No Product in Cart</h1>
     );
 
   return (
