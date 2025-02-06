@@ -1,9 +1,13 @@
 import { IKImage } from "imagekitio-next";
 import Link from "next/link";
-import { Eye } from "lucide-react";
 import { IMAGE_VARIANTS, IProduct } from "@/types/product.types";
+import { useSession } from "next-auth/react";
+import useDeleteProduct from "@/features/productMutations/useDeleteProduct";
 
 export default function ProductCard({ product }: { product: IProduct }) {
+  const { data: session } = useSession();
+  const { deleteProduct, deleteProductPending } = useDeleteProduct();
+
   const lowestPrice = product.variants.reduce(
     (min, variant) => (variant.price < min ? variant.price : min),
     product.variants[0]?.price || 0
@@ -43,6 +47,16 @@ export default function ProductCard({ product }: { product: IProduct }) {
           </div>
           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-50 transition-opacity duration-300 rounded-xl" />
         </Link>
+        {session?.user?.role === "admin" && (
+          <button
+            type="button"
+            disabled={deleteProductPending}
+            onClick={() => deleteProduct(product?._id)}
+            className=" mt-5 w-full flex justify-center items-center bg-red-500 text-gray-700 p-2 rounded-lg"
+          >
+            {deleteProductPending ? "DELETING..." : "REMOVE"}
+          </button>
+        )}
       </figure>
 
       {/* Body Section */}

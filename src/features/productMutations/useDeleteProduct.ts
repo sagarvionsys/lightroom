@@ -1,24 +1,22 @@
-import { addProductApi } from "@/services/productApi";
-import { IProduct } from "@/types/product.types";
+import { deleteProductApi } from "@/services/productApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-const useAddProduct = () => {
+const useDeleteProduct = () => {
   const queryClient = useQueryClient();
   const { mutate, isPending, isError } = useMutation({
-    mutationFn: (data: IProduct) => addProductApi(data),
-
+    mutationFn: (id: string) => deleteProductApi(id),
     onSuccess: () => {
-      toast.success("Product created successfully!");
+      toast.success("Product deleted successfully!");
       queryClient.invalidateQueries({ queryKey: ["query"] });
     },
     onError: (err) => toast.error(err.response.data.error),
   });
   return {
-    addProduct: mutate,
-    addProductLoading: isPending,
-    addProductError: isError,
+    deleteProduct: mutate,
+    deleteProductPending: isPending,
+    deleteProductError: isError,
   };
 };
 
-export default useAddProduct;
+export default useDeleteProduct;

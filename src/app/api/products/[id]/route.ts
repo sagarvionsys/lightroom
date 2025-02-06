@@ -23,3 +23,30 @@ export async function GET(
     );
   }
 }
+
+export async function DELETE(
+  req: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id: _id } = await props.params;
+
+    await dbConnect();
+    const product = await Product.deleteOne({ _id });
+    if (!product)
+      return NextResponse.json(
+        { error: "Product not found or already deleted" },
+        { status: 404 }
+      );
+    return NextResponse.json(
+      { message: "product deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log("API Error at api/product:delete", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

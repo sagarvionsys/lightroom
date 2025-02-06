@@ -15,3 +15,8 @@ export const getProductApiById = async (id: string) => {
   const response = await axios.get(`/api/products/${id}`);
   return response.data;
 };
+
+export const deleteProductApi = async (id: string) => {
+  const response = await axios.delete(`/api/products/${id}`);
+  return response.data;
+};
