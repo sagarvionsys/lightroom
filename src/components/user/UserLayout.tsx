@@ -21,7 +21,7 @@ const UserLayout = ({ session }: any) => {
         Array(2)
           .fill(null)
           .map((_, idx) => <MyOrderCardSkeleton key={idx} />)}
-      <BagSection items={bagData?.userOrder} />;
+      {bagData?.userOrder && <BagSection items={bagData?.userOrder} />}
     </>
   );
 };

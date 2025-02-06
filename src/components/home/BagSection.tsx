@@ -127,7 +127,7 @@ const BagSection = ({ items }: any) => {
 
         {!items && (
           <div className="text-center py-12">
-            <p className="text-neutral-content/70 text-lg">No orders found</p>
+            <p className="text-white text-lg">No orders found</p>
           </div>
         )}
       </div>
