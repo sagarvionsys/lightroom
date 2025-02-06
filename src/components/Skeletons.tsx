@@ -99,3 +99,31 @@ export const CartCardSkeleton = () => {
     </div>
   );
 };
+
+export const MyOrderCardSkeleton = () => {
+  return (
+    <div className=" text-gray-200">
+      <div className="container mx-auto px-4 py-8">
+        <div className="space-y-4">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg animate-pulse">
+            <div className="flex flex-wrap items-center gap-8">
+              <div className="flex flex-col w-32 h-6 bg-gray-700 rounded"></div>
+              <div className="flex flex-col w-32 h-6 bg-gray-700 rounded"></div>
+              <div className="flex flex-col w-32 h-6 bg-gray-700 rounded"></div>
+              <div className="flex flex-col w-32 h-6 bg-gray-700 rounded"></div>
+            </div>
+            <div className="flex flex-col md:flex-row items-start gap-6 mt-6">
+              <div className="w-32 h-32 bg-gray-700 rounded-lg"></div>
+              <div className="flex-grow flex flex-col gap-3">
+                <div className="w-56 h-6 bg-gray-700 rounded"></div>
+                <div className="w-32 h-6 bg-gray-700 rounded"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const UserCardSkeleton = () => {};

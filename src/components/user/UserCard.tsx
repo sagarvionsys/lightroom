@@ -3,22 +3,27 @@ import React from "react";
 
 const UserCard = ({ user }: { user: any }) => {
   return (
-    <div className="flex items-center justify-center">
-      <div className="bg-gray-700 relative shadow-xl overflow-hidden hover:shadow-2xl group rounded-xl p-5 transition-all duration-500 transform">
-        <div className="flex items-center gap-4">
+    <header className="bg-gray-900 shadow-md p-4 flex items-center justify-between w-full">
+      <div className="flex items-center gap-4">
+        <div className="relative w-16 h-16">
           <Image
-            alt="user"
+            alt="User Avatar"
             src={user?.image ?? "/user.png"}
-            width={100}
-            height={100}
-            className="w-32 group-hover:w-36 group-hover:h-36 h-32 object-center object-cover rounded-full transition-all duration-500 delay-500 transform"
+            layout="fill"
+            objectFit="cover"
+            className="rounded-full border-2 border-gray-500"
           />
-          <div className="w-fit transition-all transform duration-500">
-            {user?.email}
-          </div>
+        </div>
+        <div className="flex flex-col text-white">
+          <span className="text-xl font-semibold">
+            {user?.name ?? "User Name"}
+          </span>
+          <span className="text-sm text-gray-400">
+            {user?.email ?? "user@example.com"}
+          </span>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

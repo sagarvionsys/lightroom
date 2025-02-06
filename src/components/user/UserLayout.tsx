@@ -3,6 +3,7 @@ import UserCard from "./UserCard";
 import { useQueryFunction } from "@/features/useQuery";
 import { getOrdersApi } from "@/services/orderApi";
 import BagSection from "../home/BagSection";
+import { MyOrderCardSkeleton } from "../Skeletons";
 
 const UserLayout = ({ session }: any) => {
   const { data: bagData, isLoading: bagDataLoading } = useQueryFunction(
@@ -10,13 +11,17 @@ const UserLayout = ({ session }: any) => {
     getOrdersApi
   );
 
-  if (bagDataLoading) return <h1>Loading....</h1>;
-  const { userOrder } = bagData;
-
   return (
     <>
       <UserCard user={session?.user} />
-      <BagSection items={userOrder} />;
+      <h1 className="text-4xl font-bold my-2 text-primary-content text-center">
+        My Orders
+      </h1>
+      {bagDataLoading &&
+        Array(2)
+          .fill(null)
+          .map((_, idx) => <MyOrderCardSkeleton key={idx} />)}
+      <BagSection items={bagData?.userOrder} />;
     </>
   );
 };

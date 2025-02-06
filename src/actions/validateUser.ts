@@ -23,6 +23,7 @@ export const validateUser = async (
       id: user?._id.toString(),
       role: user?.role,
       email: user?.email,
+      name: user?.userName,
     };
   } catch (error) {
     console.error("Auth Error", error);

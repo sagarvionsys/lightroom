@@ -8,10 +8,6 @@ import { Button } from "../ui/moving-border";
 const BagSection = ({ items }: any) => {
   return (
     <div className="container mx-auto px-4 py-8 bg-base-100">
-      <h1 className="text-4xl font-bold mb-8 text-primary-content text-center">
-        My Orders
-      </h1>
-
       <div className="space-y-4">
         {items &&
           items?.map((order: any) => {
@@ -129,7 +125,7 @@ const BagSection = ({ items }: any) => {
             );
           })}
 
-        {items.length === 0 && (
+        {!items && (
           <div className="text-center py-12">
             <p className="text-neutral-content/70 text-lg">No orders found</p>
           </div>
