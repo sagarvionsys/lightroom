@@ -125,7 +125,7 @@ const BagSection = ({ items }: any) => {
             );
           })}
 
-        {!items && (
+        {items?.length === 0 && (
           <div className="text-center py-12">
             <p className="text-white text-lg">No orders found</p>
           </div>

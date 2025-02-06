@@ -1,6 +1,6 @@
 export const ProductCardSkeleton = () => {
   return (
-    <div className="w-64 md:w-72 bg-gray-900 text-white shadow-xl rounded-2xl overflow-hidden animate-pulse">
+    <div className="w-full md:w-72 bg-gray-900 text-white shadow-xl rounded-2xl overflow-hidden animate-pulse">
       <figure className="relative">
         <div className="relative w-full bg-gray-700" style={{ aspectRatio: 1 }}>
           <div className="absolute inset-0 bg-gray-700 rounded-2xl" />
