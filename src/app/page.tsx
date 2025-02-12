@@ -1,15 +1,20 @@
 "use client";
 
+import AIModel from "@/components/home/AIModel";
 import ProductCard from "@/components/home/ProductCard";
 import { ProductCardSkeleton } from "@/components/Skeletons";
 import { TextHoverEffect } from "@/components/ui/text-hover-effect";
 import { useQueryFunction } from "@/features/useQuery";
 import { getProductApi } from "@/services/productApi";
 import { IProduct } from "@/types/product.types";
+import { Modal } from "antd";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 
 export default function Home() {
+  const { data: session } = useSession();
   const [query, setQuery] = useState<FormDataEntryValue | null>(null);
+  const [AIModal, setAIModal] = useState<boolean>(false);
 
   const { data, isLoading: productIsLoading } = useQueryFunction(
     ["query"],
@@ -44,6 +49,16 @@ export default function Home() {
         </button>
       </form>
 
+      {/* ASK AI Button */}
+      {session?.user && (
+        <button
+          onClick={() => setAIModal(!AIModal)}
+          className="inline-flex w-[20rem] scale-100 h-12 mb-4 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-600 transition-colors"
+        >
+          ASK AI
+        </button>
+      )}
+
       {query && productList && (
         <div className="flex gap-2 justify-center items-center">
           <span>Result for {query.toString()}</span>
@@ -55,9 +70,10 @@ export default function Home() {
           </button>
         </div>
       )}
-      {productList?.length === 0 && (
+      {productList?.length === 0 && !productIsLoading && (
         <p className="text-white py-12 text-lg">No Images found</p>
       )}
+
       {/* product list */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 px-4">
         {productIsLoading
@@ -71,6 +87,16 @@ export default function Home() {
       <div className="h-[30rem] flex justify-center">
         <TextHoverEffect duration={5} text="LIGHTROOM" />
       </div>
+
+      {/* AI ASK Model */}
+      <Modal
+        className="bg-black"
+        footer={null}
+        open={AIModal}
+        onCancel={() => setAIModal(!AIModal)}
+      >
+        <AIModel />
+      </Modal>
     </main>
   );
 }
