@@ -20,7 +20,7 @@ export const ProductCardSkeleton = () => {
 
 export const ProductSkeleton = () => {
   return (
-    <div className="container mx-auto px-4 py-8 bg-black text-gray-200 animate-pulse">
+    <div className="container mx-auto px-4 py-8 bg-gray-900 text-gray-200 animate-pulse">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Image Skeleton */}
         <div className="space-y-4">

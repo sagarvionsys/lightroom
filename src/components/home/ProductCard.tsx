@@ -1,11 +1,15 @@
+"use client";
 import { IKImage } from "imagekitio-next";
 import Link from "next/link";
 import { IMAGE_VARIANTS, IProduct } from "@/types/product.types";
 import { useSession } from "next-auth/react";
 import useDeleteProduct from "@/features/productMutations/useDeleteProduct";
+import { usePathname } from "next/navigation";
 
 export default function ProductCard({ product }: { product: IProduct }) {
   const { data: session } = useSession();
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
   const { deleteProduct, deleteProductPending } = useDeleteProduct();
 
   const lowestPrice = product.variants.reduce(
@@ -47,14 +51,14 @@ export default function ProductCard({ product }: { product: IProduct }) {
           </div>
           <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-50 transition-opacity duration-300 rounded-xl" />
         </Link>
-        {session?.user?.role === "admin" && (
+        {session?.user?.role === "admin" && !isHomePage && (
           <button
             type="button"
             disabled={deleteProductPending}
             onClick={() => deleteProduct(product?._id)}
             className=" mt-5 w-full flex justify-center items-center bg-red-500 text-gray-700 p-2 rounded-lg"
           >
-            {deleteProductPending ? "DELETING..." : "REMOVE"}
+            {deleteProductPending ? "DELETING..." : "DELETE"}
           </button>
         )}
       </figure>

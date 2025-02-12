@@ -3,6 +3,7 @@
 import useChatAction from "@/actions/useChatAction";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Send } from "lucide-react";
 
 interface ChatMessage {
   AI: string | null;
@@ -25,10 +26,9 @@ const AIModel: React.FC = () => {
     ]);
 
     setLoading(true);
-
     const { aiChat } = await useChatAction(input);
-
     setLoading(false);
+
     setMessages((prevMessages) => {
       const newMessages = [...prevMessages];
       newMessages[newMessages.length - 1] = { USER: input, AI: aiChat };
@@ -37,26 +37,27 @@ const AIModel: React.FC = () => {
   };
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center  text-black">
       {/* Chat History */}
-      <section className="w-full text-white p-4 rounded-md mb-4 h-80 overflow-y-scroll hideBar">
-        <h2 className="text-lg font-semibold mb-2">Chat History</h2>
+      <section className="w-full max-w-lg flex flex-col rounded-lg h-[70vh] overflow-y-auto">
+        <h2 className="text-lg font-semibold mb-3 text-center">
+          Chat Assistant
+        </h2>
         <div className="space-y-3">
           <AnimatePresence>
             {messages.map((msg, index) => (
               <motion.div
                 key={index}
                 layout
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
+                exit={{ opacity: 0, y: -10 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
-                className="flex flex-col gap-3"
+                className="flex flex-col gap-2"
               >
-                {/* User Message */}
                 {msg.USER && (
                   <motion.div
-                    className="self-end bg-blue-500 text-white px-4 py-2 rounded-md max-w-xs"
+                    className="self-end bg-blue-500 text-white px-4 py-2 rounded-2xl max-w-xs shadow-md"
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.2 }}
@@ -64,15 +65,13 @@ const AIModel: React.FC = () => {
                     {msg.USER}
                   </motion.div>
                 )}
-
-                {/* AI Message (Show loading if response is pending) */}
                 <motion.div
-                  className="self-start bg-gray-700 text-white px-4 py-2 rounded-md max-w-xs"
+                  className="self-start bg-gray-700 text-white px-4 py-2 rounded-2xl max-w-xs shadow-md"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 }}
                 >
-                  {msg.AI === null ? (
+                  {msg.AI === "loading..." ? (
                     <span className="animate-pulse">Thinking...</span>
                   ) : (
                     msg.AI
@@ -85,23 +84,27 @@ const AIModel: React.FC = () => {
       </section>
 
       {/* Input Form */}
-      <section className="w-full max-w-md">
+      <section className="w-full max-w-lg mt-4">
         <form
           action={handleAskQuestion}
-          className="w-full flex items-center gap-3"
+          className="flex items-center gap-3 bg-gray-800 p-3 rounded-lg shadow-md"
         >
           <input
             name="userInput"
             required
-            className="w-full bg-transparent placeholder:text-slate-400 text-sm border border-slate-400 rounded-md pl-3 pr-28 py-2 text-black focus:outline-none focus:border-slate-500 hover:border-slate-300 shadow-sm transition"
-            placeholder="Ask About Your Order..."
+            className="w-full bg-transparent placeholder:text-gray-400 text-sm border-none rounded-md px-3 py-2 text-white focus:outline-none"
+            placeholder="Ask me anything..."
           />
           <button
-            className="border p-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition"
+            className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600 transition flex items-center justify-center"
             type="submit"
             disabled={loading}
           >
-            {loading ? "..." : "Send"}
+            {loading ? (
+              <span className="animate-pulse">...</span>
+            ) : (
+              <Send size={18} />
+            )}
           </button>
         </form>
       </section>
