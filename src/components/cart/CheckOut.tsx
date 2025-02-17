@@ -44,7 +44,7 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
   // Handle purchase action
   const handlePurchase = async () => {
     if (!session) {
-      console.error("User is not logged in.");
+      toast.error("Please log in to purchase the item");
       return;
     }
 
@@ -78,52 +78,36 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
   };
 
   return (
-    <div className="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
-      {/* Order Summary Section */}
+    <div className="mx-auto mt-6 max-w-4xl space-y-6 lg:w-full">
       <div className="space-y-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-sm sm:p-6">
         <p className="text-xl font-semibold text-white">Order summary</p>
-
         <div className="space-y-4">
-          <div className="space-y-2">
-            {/* Original Price */}
-            <dl className="flex items-center justify-between gap-4">
-              <dt className="text-base font-normal text-gray-400">
-                Original price
-              </dt>
-              <dd className="text-base font-medium text-white">
-                {toINR(totalBill)}
+          <dl className="flex items-center justify-between">
+            <dt className="text-base text-gray-400">Original price</dt>
+            <dd className="text-base text-white">{toINR(totalBill)}</dd>
+          </dl>
+
+          {voucherName && (
+            <dl className="flex items-center justify-between">
+              <dt className="text-base text-gray-400">Voucher</dt>
+              <dd className="flex items-center text-red-600 gap-2">
+                - {toINR(voucherAmount)}
+                <span className="text-sm text-gray-400 bg-black p-1 rounded-lg flex gap-2">
+                  <p>{voucherName}</p>
+                  <button onClick={resetVoucher}>
+                    <X size={12} />
+                  </button>
+                </span>
               </dd>
             </dl>
+          )}
 
-            {/* Voucher Information */}
-            {voucherName && (
-              <dl className="flex items-center justify-between gap-4">
-                <dt className="text-base font-normal text-gray-400">Voucher</dt>
-                <dd className="flex items-center text-base font-medium text-red-600 gap-2">
-                  <div className="flex flex-col justify-center items-center">
-                    - {toINR(voucherAmount)}
-                    <span className="text-sm text-gray-400 flex gap-2 bg-black p-1 rounded-lg">
-                      <p>{voucherName}</p>
-                      <button onClick={resetVoucher}>
-                        <X size={12} />
-                      </button>
-                    </span>
-                  </div>
-                </dd>
-              </dl>
-            )}
+          <dl className="flex items-center justify-between">
+            <dt className="text-base text-gray-400">Savings</dt>
+            <dd className="text-base text-green-600">{toINR(voucherAmount)}</dd>
+          </dl>
 
-            {/* Savings */}
-            <dl className="flex items-center justify-between gap-4">
-              <dt className="text-base font-normal text-gray-400">Savings</dt>
-              <dd className="text-base font-medium text-green-600">
-                {toINR(voucherAmount)}
-              </dd>
-            </dl>
-          </div>
-
-          {/* Total */}
-          <dl className="flex items-center justify-between gap-4 border-t border-gray-700 pt-2">
+          <dl className="flex items-center justify-between border-t border-gray-700 pt-2">
             <dt className="text-base font-bold text-white">Total</dt>
             <dd className="text-base font-bold text-white">
               {toINR(totalAmount)}
@@ -131,58 +115,47 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
           </dl>
         </div>
 
-        {/* Checkout Button */}
         <button
           onClick={handlePurchase}
-          className="flex w-full items-center justify-center rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-800"
+          className="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-white hover:bg-primary-700 focus:ring-4 focus:ring-primary-800"
         >
           Proceed to Checkout
         </button>
 
-        {/* Continue Shopping */}
         <div className="flex items-center justify-center gap-2">
-          <span className="text-sm font-normal text-gray-400"> or </span>
+          <span className="text-sm text-gray-400">or</span>
           <Link
-            href={"/"}
-            title="Continue Shopping"
-            className="inline-flex items-center gap-2 text-sm font-medium text-primary-500 underline hover:no-underline"
+            href="/"
+            className="text-sm text-primary-500 underline hover:no-underline flex items-center gap-2"
           >
-            Continue Shopping
-            <MoveRight />
+            Continue Shopping <MoveRight />
           </Link>
         </div>
       </div>
 
-      {/* Voucher Section */}
       <div className="space-y-4 rounded-lg border border-gray-700 bg-gray-800 p-4 shadow-sm sm:p-6">
         <form
           className="space-y-4"
           onSubmit={(e) => {
             e.preventDefault();
-            const data = new FormData(e.currentTarget);
-            handleVoucher(data);
+            handleVoucher(new FormData(e.currentTarget));
           }}
         >
-          {/* Voucher Input */}
-          <div>
-            <label className="mb-2 block text-sm font-medium text-white">
-              Do you have a voucher or gift card?
-            </label>
-            <input
-              name="voucher"
-              type="text"
-              id="voucher"
-              className="block w-full rounded-lg border border-gray-600 bg-gray-700 p-2.5 text-sm text-white placeholder:text-gray-400 focus:border-primary-500 focus:ring-primary-500"
-              placeholder="Enter voucher code"
-              required
-            />
-          </div>
+          <label className="text-sm text-white block">
+            Do you have a voucher or gift card?
+          </label>
+          <input
+            name="voucher"
+            type="text"
+            className="w-full rounded-lg border border-gray-600 bg-gray-700 p-2.5 text-white placeholder-gray-400 focus:border-primary-500 focus:ring-primary-500"
+            placeholder="Enter voucher code"
+            required
+          />
 
-          {/* Apply Code Button */}
           <button
             disabled={verifyVoucherPending}
             type="submit"
-            className="flex w-full items-center justify-center rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-4 focus:ring-primary-800"
+            className="w-full rounded-lg bg-primary-600 px-5 py-2.5 text-white hover:bg-primary-700 focus:ring-4 focus:ring-primary-800"
           >
             {verifyVoucherPending ? <Spinner /> : "Apply Code"}
           </button>

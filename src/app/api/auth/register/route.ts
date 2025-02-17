@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
         : ip(req) || "0.0.0.0";
     const { email, password, userName } = await req.json();
     const decision = await aj.protect(req, { fingerprint: userIp, email });
-    console.log("decision", decision);
 
     if (decision.isDenied()) {
       return NextResponse.json(

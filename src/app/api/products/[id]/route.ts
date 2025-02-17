@@ -16,7 +16,6 @@ export async function GET(
 
     return NextResponse.json({ product }, { status: 200 });
   } catch (error) {
-    console.log("API Error at api/product:GET", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -43,7 +42,6 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.log("API Error at api/product:delete", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

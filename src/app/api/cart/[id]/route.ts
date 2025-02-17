@@ -16,7 +16,6 @@ export async function DELETE(
       { status: 200 }
     );
   } catch (error) {
-    console.log("API Error at api/cart/[id]:DELETE", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

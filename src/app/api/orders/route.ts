@@ -49,7 +49,6 @@ export async function POST(rea: NextRequest) {
       dbOrderId: newOrder._id,
     });
   } catch (error) {
-    console.log("API Error at api/orders:POST", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

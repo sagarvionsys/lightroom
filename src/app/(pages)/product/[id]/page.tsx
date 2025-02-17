@@ -62,7 +62,6 @@ const Product = () => {
     }
     if (selectedVariant) {
       addItemToCart({ productId: productData?._id, variant: selectedVariant });
-      toast.success("Item added to cart!");
     }
   };
 

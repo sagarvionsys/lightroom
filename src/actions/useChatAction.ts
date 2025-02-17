@@ -24,7 +24,6 @@ const getUserOrderDetails = async () => {
 
     return userOrders;
   } catch (error) {
-    console.log("Get User Order Error:", error);
     return [];
   }
 };
@@ -35,7 +34,6 @@ const getAllProducts = async () => {
     const productList = await Product.find({}).lean();
     return productList;
   } catch (error) {
-    console.log("Get All Products Error:", error);
     return [];
   }
 };
@@ -121,7 +119,6 @@ You are an AI-powered e-commerce assistant, designed to provide professional, ac
 
     return { aiChat: aiResponse, userChat: input };
   } catch (error) {
-    console.log("AI Chat Error:", error);
     return {
       aiChat: "An unexpected error occurred. Please try again later.",
       userChat: input,

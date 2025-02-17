@@ -5,19 +5,17 @@ import {
   IKUploadResponse,
   UploadError,
 } from "imagekitio-next/dist/types/components/IKUpload/props";
+import toast from "react-hot-toast";
 
 const FileUpload = ({
   onSuccess,
 }: {
   onSuccess: (response: IKUploadResponse) => void;
 }) => {
-  const handleError = (error: UploadError) => {
-    console.log("Error in image upload", error);
-  };
+  const handleError = (error: UploadError) => {};
 
   const handleResponse = (response: IKUploadResponse) => {
     onSuccess(response);
-    console.log("Image uploaded", response);
   };
 
   return (
@@ -26,11 +24,17 @@ const FileUpload = ({
         fileName="test-file.png"
         onSuccess={handleResponse}
         onError={handleError}
-        onUploadStart={() => console.log("Uploading...")}
+        onUploadStart={() => toast.success("file is uploaded")}
         validateFile={(file: File) => {
           const validTypes = ["image/png", "image/jpeg", "image/jpg"];
-          if (!validTypes.includes(file.type)) console.log("Invalid file type");
-          if (file.size > 2 * 1024 * 1024) console.log("File size too large");
+          if (!validTypes.includes(file.type)) {
+            toast.error("Invalid file type");
+            return false;
+          }
+          if (file.size > 2 * 1024 * 1024) {
+            toast.error("File size too large");
+            return false;
+          }
           return true;
         }}
       />

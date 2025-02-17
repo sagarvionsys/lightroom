@@ -28,7 +28,6 @@ export async function GET() {
 
     return NextResponse.json({ userOrder }, { status: 200 });
   } catch (error) {
-    console.log("API Error at api/orders/users:GET", error);
     return NextResponse.json(
       { error: "Internal Server Error" },
       { status: 500 }

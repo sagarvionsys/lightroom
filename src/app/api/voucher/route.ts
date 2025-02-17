@@ -40,7 +40,6 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("error at api/voucher :post ", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -64,7 +63,6 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ allVouchers }, { status: 200 });
   } catch (error) {
-    console.log("error at api/voucher :get ", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
     const event = body;
     await dbConnect();
 
-    console.log({ event });
     // payment success method
     if (event.event === "payment.captured") {
       const payment = event.payload.payment.entity;
@@ -63,8 +62,6 @@ export async function POST(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.log("API Error at api/webhook/razorpay:POST", error);
     return new Response("Internal server error", { status: 500 });
   }
 }
-

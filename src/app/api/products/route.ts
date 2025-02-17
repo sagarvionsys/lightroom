@@ -15,7 +15,6 @@ export async function GET() {
 
     return NextResponse.json({ productList }, { status: 200 });
   } catch (error) {
-    console.log("API Error at api/product:GET", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -50,7 +49,6 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ newProduct }, { status: 201 });
   } catch (error) {
-    console.log("API Error at api/product:POST", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
