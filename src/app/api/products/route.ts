@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import Product from "@/models/product.model";
 import { IProduct } from "@/types/product.types";
+import Notification from "@/models/notification.model";
 
 export async function GET() {
   try {
@@ -47,7 +48,13 @@ export async function POST(req: NextRequest) {
 
     const newProduct = await Product.create(body);
 
-    return NextResponse.json({ newProduct }, { status: 201 });
+    // notification for new product
+    const newNotification = await Notification.create({
+      title: `New image added: ${newProduct?.name}`,
+      imageId: newProduct?._id,
+    });
+
+    return NextResponse.json({ newProduct, newNotification }, { status: 201 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },

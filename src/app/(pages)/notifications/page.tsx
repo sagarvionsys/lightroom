@@ -6,28 +6,21 @@ const notifications = [
   {
     id: 1,
     message: "New update available for your account settings.",
-    type: "info",
-    icon: <Info className="text-blue-500" />,
+    date: "Feb 18, 2025",
   },
   {
     id: 2,
     message: "New image added: 'Sunset in the Mountains'.",
     date: "Feb 18, 2025",
     imageTitle: "Sunset in the Mountains",
-    type: "image",
-    icon: <Image className="text-purple-500" />,
-    actionText: "View Image",
-    actionLink: "/product/67a330fc5838ee22fa5ffab9",
+    imageId: "/product/67a330fc5838ee22fa5ffab9",
   },
   {
     id: 3,
     message: "New image added: 'lost origin'.",
     date: "Jan 24, 2025",
     imageTitle: "lost origin'",
-    type: "image",
-    icon: <Image className="text-purple-500" />,
-    actionText: "View Image",
-    actionLink: "/product/67a330fc5838ee22fa5ffab9",
+    imageId: "/product/67a330fc5838ee22fa5ffab9",
   },
 ];
 
@@ -51,32 +44,32 @@ const NotificationsPage = () => {
       {/* Notifications List */}
       <div className="w-full max-w-2xl mt-6 space-y-4">
         {notifications.length > 0 ? (
-          notifications.map(
-            ({ id, message, icon, date, actionText, actionLink }) => (
-              <div
-                key={id}
-                className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-md"
-              >
-                <div className="flex items-center gap-4">
-                  {icon}
-                  <div>
-                    <p className="text-sm text-gray-300">{message}</p>
-                    {date && (
-                      <p className="text-xs text-gray-500 mt-1">Date: {date}</p>
-                    )}
-                  </div>
-                </div>
-                {actionText && actionLink && (
-                  <Link
-                    href={actionLink}
-                    className="text-xs text-primary-500 hover:underline mt-2 sm:mt-0"
-                  >
-                    {actionText}
-                  </Link>
+          notifications.map(({ id, message, date, imageId }) => (
+            <div
+              key={id}
+              className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-md"
+            >
+              <div className="flex items-center gap-4">
+                {imageId ? (
+                  <Image className="text-purple-500" />
+                ) : (
+                  <Info className="text-blue-500" />
                 )}
+                <div>
+                  <p className="text-sm text-gray-300">{message}</p>
+                  <p className="text-xs text-gray-500 mt-1">Date: {date}</p>
+                </div>
               </div>
-            )
-          )
+              {imageId && (
+                <Link
+                  href={imageId}
+                  className="text-xs text-primary-500 hover:underline mt-2 sm:mt-0"
+                >
+                  view
+                </Link>
+              )}
+            </div>
+          ))
         ) : (
           <p className="text-gray-400 text-sm text-center">
             No notifications yet.
