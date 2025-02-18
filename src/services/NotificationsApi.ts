@@ -11,7 +11,7 @@ export const createNotifications = async (title: string) => {
 };
 
 export const deleteNotification = async (id: string) => {
-  const response = await axios.delete(`/api/delete/id=${id}`);
+  const response = await axios.delete(`/api/notification/?id=${id}`);
   return response.data;
 };
 
@@ -22,6 +22,8 @@ export const updateNotifications = async ({
   id: string;
   title: string;
 }) => {
-  const response = await axios.patch(`/api/delete/id=${id}`, { title });
+  const response = await axios.patch(`/api/notification/?id=${id}`, {
+    title,
+  });
   return response.data;
 };

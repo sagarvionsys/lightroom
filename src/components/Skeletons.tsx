@@ -127,3 +127,20 @@ export const MyOrderCardSkeleton = () => {
 };
 
 export const UserCardSkeleton = () => {};
+
+export const NotificationSkeleton = () => {
+  return (
+    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-md w-full  animate-pulse">
+      <div className="flex items-center gap-4">
+        {/* Skeleton Icon */}
+        <div className="w-10 h-10 bg-gray-700 rounded-full"></div>
+
+        {/* Skeleton Text */}
+        <div>
+          <div className="w-40 h-4 bg-gray-700 rounded mb-2"></div>
+          <div className="w-24 h-3 bg-gray-700 rounded"></div>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -5,6 +5,7 @@ import { IMAGE_VARIANTS, IProduct } from "@/types/product.types";
 import { useSession } from "next-auth/react";
 import useDeleteProduct from "@/features/productMutations/useDeleteProduct";
 import { usePathname } from "next/navigation";
+import Spinner from "../Spinner";
 
 export default function ProductCard({ product }: { product: IProduct }) {
   const { data: session } = useSession();
@@ -58,7 +59,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
             onClick={() => deleteProduct(product?._id || "")}
             className=" mt-5 w-full flex justify-center items-center bg-red-500 text-gray-700 p-2 rounded-lg"
           >
-            {deleteProductPending ? "DELETING..." : "DELETE"}
+            {deleteProductPending ? <Spinner /> : "DELETE"}
           </button>
         )}
       </figure>

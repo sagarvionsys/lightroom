@@ -15,6 +15,7 @@ import { Types } from "mongoose";
 import useAddProduct from "@/features/productMutations/useAddProduct";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import Spinner from "../Spinner";
 
 export interface CreateOrderData {
   productId: Types.ObjectId | string;
@@ -31,6 +32,7 @@ export default function AdminProductForm() {
     control,
     handleSubmit,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<ProductFormData>({
     defaultValues: {
@@ -52,13 +54,11 @@ export default function AdminProductForm() {
     name: "variants",
   });
 
-  const handleUploadSuccess = (response: IKUploadResponse) => {
+  const handleUploadSuccess = (response: IKUploadResponse) =>
     setValue("imageUrl", response.filePath);
-    // showNotification("Image uploaded successfully!", "success");
-  };
 
   const onSubmit = async (data: ProductFormData) => {
-    addProduct(data);
+    addProduct(data, { onSettled: () => reset() });
   };
 
   return (
@@ -116,7 +116,7 @@ export default function AdminProductForm() {
             Pricing Variants
           </h3>
 
-          {fields.map((field, index) => (
+          {fields?.map((field, index) => (
             <div key={field.id} className="mb-4 p-4 border rounded-lg bg-white">
               <div className="flex justify-center items-center gap-3">
                 <div className="flex items-center justify-center gap-4">
@@ -239,11 +239,7 @@ export default function AdminProductForm() {
             disabled={addProductLoading}
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
           >
-            {addProductLoading ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              "Publish Product"
-            )}
+            {addProductLoading ? <Spinner /> : "Publish Product"}
           </button>
         </div>
       </form>

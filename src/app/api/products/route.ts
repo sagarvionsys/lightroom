@@ -35,12 +35,7 @@ export async function POST(req: NextRequest) {
     await dbConnect();
     const body: IProduct = await req.json();
 
-    if (
-      !body.name ||
-      !body.description ||
-      !body.imageUrl ||
-      body.variants.length === 0
-    )
+    if (!body.name || !body.description || !body.imageUrl)
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }

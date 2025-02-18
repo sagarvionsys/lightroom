@@ -4,7 +4,7 @@ import Link from "next/link";
 import React from "react";
 
 const NotificationList = ({ notes }: { notes: INotification }) => {
-  const { _id, title, createdAt, imageId } = notes;
+  const { title, createdAt, imageId } = notes;
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 bg-gray-800 border border-gray-700 rounded-lg shadow-md">
       <div className="flex items-center gap-4">

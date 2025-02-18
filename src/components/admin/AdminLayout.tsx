@@ -8,9 +8,13 @@ import { IProduct } from "@/types/product.types";
 import ProductCard from "../home/ProductCard";
 import { ProductCardSkeleton } from "../Skeletons";
 import { Modal } from "antd";
+import AdminNotification from "./AdminNotification";
+import { PlusCircle } from "lucide-react";
+import { IconNotification } from "@tabler/icons-react";
 
 const AdminLayout = () => {
   const [ModalOpen, setModalOpen] = useState(false);
+  const [NotificationModalOpen, setNotificationModalOpen] = useState(false);
   const { data, isLoading: productIsLoading } = useQueryFunction(
     ["query"],
     getProductApi
@@ -19,12 +23,22 @@ const AdminLayout = () => {
 
   return (
     <>
-      <button
-        onClick={() => setModalOpen(!ModalOpen)}
-        className="shadow-[0_0_0_3px_#000000_inset] ml-3 m-2 flex items-end px-6 py-2 bg-transparent border border-white text-white rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
-      >
-        Add Product
-      </button>
+      <div className="flex items-center">
+        <button
+          onClick={() => setModalOpen(!ModalOpen)}
+          className="shadow-[0_0_0_3px_#000000_inset]  m-2 flex gap-2 items-end px-3 py-2 bg-transparent border border-white text-white rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
+        >
+          <PlusCircle />
+          Add Product
+        </button>
+        <button
+          onClick={() => setNotificationModalOpen(!NotificationModalOpen)}
+          className="shadow-[0_0_0_3px_#000000_inset] ml-3 m-2 flex items-end px-2 gap-2 py-2 bg-transparent border border-white text-white rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
+        >
+          <IconNotification />
+          Notification
+        </button>
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 px-4">
         {productIsLoading
           ? Array(4)
@@ -34,6 +48,8 @@ const AdminLayout = () => {
               <ProductCard key={idx} product={product} />
             ))}
       </div>
+
+      {/* product create form */}
       <Modal
         width={700}
         footer={null}
@@ -41,6 +57,16 @@ const AdminLayout = () => {
         onCancel={() => setModalOpen(!ModalOpen)}
       >
         <AdminProductForm />
+      </Modal>
+
+      {/* add Notifications modal */}
+      <Modal
+        width={600}
+        footer={null}
+        open={NotificationModalOpen}
+        onCancel={() => setNotificationModalOpen(!NotificationModalOpen)}
+      >
+        <AdminNotification />
       </Modal>
     </>
   );

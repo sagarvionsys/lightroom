@@ -10,7 +10,8 @@ const useAddProduct = () => {
 
     onSuccess: () => {
       toast.success("Product created successfully!");
-      queryClient.invalidateQueries({ queryKey: ["query", "notifications"] });
+      queryClient.invalidateQueries({ queryKey: ["query"] });
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
     onError: (err: any) => toast.error(err.response.data.error),
   });
