@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Navbar as MTNavbar,
-  Collapse,
-  Button,
-  IconButton,
-  Typography,
-} from "@material-tailwind/react";
+import { Navbar as MTNavbar, Collapse } from "@material-tailwind/react";
 import { signOut, useSession } from "next-auth/react";
 import {
   BellDot,
@@ -21,21 +15,6 @@ import Link from "next/link";
 interface NavItemProps {
   children: React.ReactNode;
   href?: string;
-}
-
-function NavItem({ children, href }: NavItemProps) {
-  return (
-    <li>
-      <Link
-        href={href || "/"}
-        className="flex items-center justify-center gap-2 font-medium text-white"
-      >
-        <Typography variant="small" color="white">
-          {children}
-        </Typography>
-      </Link>
-    </li>
-  );
 }
 
 export function Navbar_MT() {
@@ -64,30 +43,39 @@ export function Navbar_MT() {
     <MTNavbar
       shadow={false}
       fullWidth
-      className=" bg-black border-0 sticky top-0 z-50"
+      className="bg-black border-0 sticky top-0 z-50"
+      placeholder=""
+      onPointerEnterCapture={() => {}}
+      onPointerLeaveCapture={() => {}}
     >
-      <div className="flex items-center justify-between ">
-        <Typography color="white" className="text-xl mt-5 font-bold">
-          LightRoom
-        </Typography>
-        <IconButton variant="text" color="white" onClick={handleOpen}>
+      <div className="flex items-center justify-between p-4">
+        {/* Updated Typography to h1 */}
+        <h1 className="text-2xl font-bold text-white">LightRoom</h1>
+
+        <button onClick={handleOpen}>
           {open ? <X size={24} /> : <Menu size={24} />}
-        </IconButton>
+        </button>
       </div>
+
       <Collapse open={open}>
         <div className="container mx-auto mt-3 border-t border-gray-200 px-2 pt-4">
-          <ul className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 justify-start">
             {links.map(({ title, icon: Icon, href }) => (
-              <NavItem key={title} href={href}>
-                <Icon size={20} />
-                {title}
-              </NavItem>
+              <Link
+                href={href || "/"}
+                className="flex gap-2 font-medium text-white"
+              >
+                <div className="w-full flex items-center gap-3">
+                  <Icon />
+                  <span className="text-sm">{title}</span>
+                </div>
+              </Link>
             ))}
-          </ul>
+          </div>
           <div className="mt-6 mb-4 flex flex-col gap-2">
-            <Button variant="text" color="white" onClick={handleAuthAction}>
+            <button onClick={handleAuthAction}>
               {isLogin ? "Log Out" : "Sign In"}
-            </Button>
+            </button>
           </div>
         </div>
       </Collapse>

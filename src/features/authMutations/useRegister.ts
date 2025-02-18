@@ -9,7 +9,7 @@ const useRegister = () => {
       registerAPi({ userName, email, password }),
 
     onSuccess: () => toast.success("User created successfully!"),
-    onError: (err) => toast.error(err.response.data.error),
+    onError: (err: any) => toast.error(err.response.data.error),
   });
   return {
     register: mutate,

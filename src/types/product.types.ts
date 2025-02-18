@@ -30,7 +30,7 @@ export interface ImageVariant {
 }
 
 export interface IProduct {
-  _id?: mongoose.Types.ObjectId;
+  _id?: string;
   name: string;
   description: string;
   imageUrl: string;

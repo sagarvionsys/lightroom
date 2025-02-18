@@ -12,7 +12,7 @@ const useItemToCart = () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast.success("item added successfully!");
     },
-    onError: (err) => toast.error(err.response.data.error),
+    onError: (err:any) => toast.error(err.response.data.error),
   });
   return {
     addItemToCart: mutate,

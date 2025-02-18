@@ -6,7 +6,7 @@ const useVerifyVoucher = () => {
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (code: FormDataEntryValue | null) => verifyVoucher(code),
     onSuccess: () => toast.success("Voucher is added"),
-    onError: (err) => toast.error(err.response.data.error),
+    onError: (err: any) => toast.error(err.response.data.error),
   });
   return {
     verifyVoucher: mutate,

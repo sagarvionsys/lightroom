@@ -1,5 +1,6 @@
 import { IProduct } from "@/types/product.types";
 import axios from "axios";
+import { ObjectId } from "mongoose";
 
 export const getProductApi = async () => {
   const response = await axios.get("/api/products");
@@ -15,8 +16,7 @@ export const getProductApiById = async (id: string) => {
   const response = await axios.get(`/api/products/${id}`);
   return response.data;
 };
-
-export const deleteProductApi = async (id: string) => {
+export const deleteProductApi = async (id: ObjectId | string) => {
   const response = await axios.delete(`/api/products/${id}`);
   return response.data;
 };

@@ -8,7 +8,7 @@ const useAddOrder = () => {
       addOrderApi({ productId, variant }),
 
     onSuccess: () => toast.success("order created successfully!"),
-    onError: (err) => toast.error(err.response.data.error),
+    onError: (err: any) => toast.error(err.response.data.error),
   });
 
   return {

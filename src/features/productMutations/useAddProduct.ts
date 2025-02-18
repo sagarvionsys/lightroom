@@ -12,7 +12,7 @@ const useAddProduct = () => {
       toast.success("Product created successfully!");
       queryClient.invalidateQueries({ queryKey: ["query"] });
     },
-    onError: (err) => toast.error(err.response.data.error),
+    onError: (err: any) => toast.error(err.response.data.error),
   });
   return {
     addProduct: mutate,

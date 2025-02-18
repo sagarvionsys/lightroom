@@ -11,7 +11,7 @@ const useDeleteCartItem = () => {
       queryClient.invalidateQueries({ queryKey: ["cart"] });
       toast.success("cart item deleted successfully!");
     },
-    onError: (err) => toast.error(err.response.data.error),
+    onError: (err: any) => toast.error(err.response.data.error),
   });
   return {
     deleteItem: mutate,

@@ -10,7 +10,7 @@ const useDeleteProduct = () => {
       toast.success("Product deleted successfully!");
       queryClient.invalidateQueries({ queryKey: ["query"] });
     },
-    onError: (err) => toast.error(err.response.data.error),
+    onError: (err: any) => toast.error(err.response.data.error),
   });
   return {
     deleteProduct: mutate,

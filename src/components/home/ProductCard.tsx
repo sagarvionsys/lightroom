@@ -55,7 +55,7 @@ export default function ProductCard({ product }: { product: IProduct }) {
           <button
             type="button"
             disabled={deleteProductPending}
-            onClick={() => deleteProduct(product?._id)}
+            onClick={() => deleteProduct(product?._id || "")}
             className=" mt-5 w-full flex justify-center items-center bg-red-500 text-gray-700 p-2 rounded-lg"
           >
             {deleteProductPending ? "DELETING..." : "DELETE"}
