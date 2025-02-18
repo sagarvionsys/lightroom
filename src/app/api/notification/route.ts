@@ -36,7 +36,7 @@ export async function GET() {
     await dbConnect();
     const allNotifications = await Notification.find({});
 
-    return NextResponse.json({ allNotifications }, { status: 200 });
+    return NextResponse.json(allNotifications, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },
@@ -71,7 +71,7 @@ export async function DELETE(req: NextRequest) {
         { status: 404 }
       );
 
-    return NextResponse.json({ deleteNotifications }, { status: 200 });
+    return NextResponse.json(deleteNotifications, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },
@@ -108,7 +108,7 @@ export async function PATCH(req: NextRequest) {
         { status: 404 }
       );
 
-    return NextResponse.json({ updatedNotifications }, { status: 200 });
+    return NextResponse.json(updatedNotifications, { status: 200 });
   } catch (error) {
     return NextResponse.json(
       { error: "Internal server error" },
