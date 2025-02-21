@@ -14,11 +14,11 @@ import { ImageIcon, ShoppingCart } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
 import { Modal, Button } from "antd";
 import CheckOut from "@/components/cart/CheckOut";
 import ItemPreview from "@/components/cart/ItemPreview";
 import { ProductSkeleton } from "@/components/Skeletons";
+import { useRouter } from "next/navigation";
 
 const getTransformation = (variantType: ImageVariantType) => {
   const { dimensions } = IMAGE_VARIANTS[variantType];
@@ -34,6 +34,7 @@ const getTransformation = (variantType: ImageVariantType) => {
 };
 
 const Product = () => {
+  const router = useRouter();
   const [purchaseModal, setPurchaseModal] = useState(false);
   const { id } = useParams();
   const { data: product, isLoading: productLoading } = useQueryFunctionWithId(
@@ -56,10 +57,8 @@ const Product = () => {
   const { product: productData } = product;
 
   const handleAddToCart = async () => {
-    if (!session) {
-      toast.error("Please log in to add items to cart.");
-      return;
-    }
+    if (!session) return router.push("/sign-in");
+
     if (selectedVariant) {
       addItemToCart({ productId: productData?._id, variant: selectedVariant });
     }
@@ -169,6 +168,7 @@ const Product = () => {
                       </Button>
                       <Button
                         onClick={(e) => {
+                          if (!session) return router.push("/sign-in");
                           e.stopPropagation();
                           setSelectedVariant(variant);
                           handleAddToCart();

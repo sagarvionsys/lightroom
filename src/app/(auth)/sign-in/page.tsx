@@ -31,7 +31,7 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="max-w-md m-6 w-full mx-auto rounded-none md:rounded-2xl  md:p-8 shadow-input bg-white dark:bg-black">
+    <div className="max-w-md m-6 w-full p-6 mx-auto mt-12 rounded-2xl  md:p-8 shadow-input bg-white dark:bg-black">
       <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
         Welcome to LightRoom
       </h2>

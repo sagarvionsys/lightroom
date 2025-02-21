@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
 import Providers from "@/providers";
+import Nav from "@/components/Nav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,8 +23,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -35,7 +38,11 @@ export default function RootLayout({
           strategy="lazyOnload"
         />
         <Providers>
-          <main>{children}</main>
+          <main>
+            <Nav />
+            {modal}
+            {children}
+          </main>
         </Providers>
       </body>
     </html>

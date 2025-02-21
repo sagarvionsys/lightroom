@@ -1,12 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { ImageKitProvider } from "imagekitio-next";
 import { SessionProvider } from "next-auth/react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
-import { Navbar } from "./components/Navbar";
-import Navbar_MT from "./components/Navbar-Mobile";
 
 const urlEndpoint = process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!;
 const publicKey = process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!;
@@ -21,19 +19,6 @@ const queryClient = new QueryClient({
 });
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 725);
-    };
-
-    handleResize(); // Set initial value
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const authenticator = async () => {
     try {
       const response = await fetch("/api/imagekit-auth");
@@ -62,7 +47,6 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           urlEndpoint={urlEndpoint}
           authenticator={authenticator}
         >
-          {isMobile ? <Navbar_MT /> : <Navbar />}
           {children}
         </ImageKitProvider>
       </QueryClientProvider>
