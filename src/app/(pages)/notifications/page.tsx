@@ -26,13 +26,15 @@ const NotificationsPage = () => {
   const { markNotification, markNotificationPending } = useMarkNotification();
   const { data: session } = useSession();
 
+  // Filter State
   const [filterType, setFilterType] = useState("all");
   const [selectedFilter, setSelectedFilter] = useState("All Notifications");
 
+  // Filtered Notifications
   const filteredNotifications = notifications?.filter((note: INotification) => {
-    if (filterType === "admin") return !note.imageId;
-    if (filterType === "image") return note.imageId;
-    return true;
+    if (filterType === "admin") return !note.imageId; // Admin messages (no imageId)
+    if (filterType === "image") return note.imageId; // Image updates (has imageId)
+    return true; // Show all
   });
 
   const handleFilterChange = (type: string, label: string) => {
@@ -62,8 +64,11 @@ const NotificationsPage = () => {
         </div>
       </header>
 
+      {/* Main Layout */}
       <div className="w-full md:max-w-6xl flex md:flex-row flex-col gap-6 mt-6">
+        {/* Left Section */}
         <aside className="w-full md:w-1/3 bg-gray-900 p-4 rounded-lg space-y-6">
+          {/* Notification Legend */}
           <div>
             <h1 className="text-lg font-semibold">Notification Legend</h1>
             <ul className="mt-3 space-y-2 text-gray-400 text-sm">
@@ -78,6 +83,7 @@ const NotificationsPage = () => {
             </ul>
           </div>
 
+          {/* Filter Dropdown (Integrated) */}
           <div className="mt-4">
             <h1 className="text-lg font-semibold text-gray-300 py-2">
               Filter Notifications
