@@ -16,11 +16,12 @@ import { getNotifications } from "@/services/NotificationsApi";
 import { INotification } from "@/types/notification.types";
 import useLogOut from "@/features/authMutations/useLogout";
 import Spinner from "./Spinner";
+import Link from "next/link";
 
 export function Navbar() {
   const { data: session } = useSession();
-  const { logOut, logOutPending } = useLogOut();
   const isLogin = session?.user;
+  const { logOut, logOutPending } = useLogOut();
 
   // Fetch notifications
   const { data: notifications = [] } = useQueryFunction(
@@ -72,16 +73,21 @@ export function Navbar() {
   ];
 
   return (
-    <div className="flex items-center justify-center h-[8rem] w-full">
-      <FloatingDock items={links} />
+    <>
+      <div className="flex items-center justify-between h-[8rem] w-full px-12">
+        <Link href={"/"} className="hidden md:flex">
+          <h1 className=" text-2xl font-bold text-white">LightRoom</h1>
+        </Link>
+        <FloatingDock items={links} />
 
-      {isLogin && (
-        <div className="group relative p-6">
-          <button onClick={() => logOut()}>
-            {logOutPending ? <Spinner /> : <LogOut />}
-          </button>
-        </div>
-      )}
-    </div>
+        {isLogin && (
+          <div className="group relative p-6">
+            <button onClick={() => logOut()}>
+              {logOutPending ? <Spinner /> : <LogOut />}
+            </button>
+          </div>
+        )}
+      </div>
+    </>
   );
 }

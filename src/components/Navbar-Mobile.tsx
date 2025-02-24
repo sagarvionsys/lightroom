@@ -68,7 +68,9 @@ export function Navbar_MT() {
       onPointerLeaveCapture={() => {}}
     >
       <div className="flex items-center justify-between p-4">
-        <h1 className="text-2xl font-bold text-white">LightRoom</h1>
+        <Link href={"/"}>
+          <h1 className="text-2xl font-bold text-white">LightRoom</h1>
+        </Link>
 
         <button onClick={handleOpen}>
           {open ? <X size={24} /> : <Menu size={24} />}

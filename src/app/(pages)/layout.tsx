@@ -4,6 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import Providers from "@/providers";
 import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,6 +43,7 @@ export default function RootLayout({
             <Nav />
             {modal}
             {children}
+            <Footer />
           </main>
         </Providers>
       </body>

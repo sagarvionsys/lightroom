@@ -91,7 +91,7 @@ export default function Home() {
       </div>
 
       {/* 🌟 Animated Text */}
-      <div className="h-[30rem] flex justify-center items-center w-full">
+      <div className="flex justify-center items-center w-full">
         <TextHoverEffect duration={5} text="LIGHTROOM" />
       </div>
 
