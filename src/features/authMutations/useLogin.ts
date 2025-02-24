@@ -11,7 +11,7 @@ const useLogin = () => {
         redirect: false,
       }),
     onSuccess: () => toast.success("user login successful"),
-    onError: () => toast.error("there while logging"),
+    onError: () => toast.error("there error while logging"),
   });
   return {
     login: mutate,

@@ -10,13 +10,16 @@ import {
   LogOut,
   ShoppingCart,
 } from "lucide-react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useQueryFunction } from "@/features/useQuery";
 import { getNotifications } from "@/services/NotificationsApi";
 import { INotification } from "@/types/notification.types";
+import useLogOut from "@/features/authMutations/useLogout";
+import Spinner from "./Spinner";
 
 export function Navbar() {
   const { data: session } = useSession();
+  const { logOut, logOutPending } = useLogOut();
   const isLogin = session?.user;
 
   // Fetch notifications
@@ -74,8 +77,8 @@ export function Navbar() {
 
       {isLogin && (
         <div className="group relative p-6">
-          <button onClick={() => signOut()}>
-            <LogOut />
+          <button onClick={() => logOut()}>
+            {logOutPending ? <Spinner /> : <LogOut />}
           </button>
         </div>
       )}

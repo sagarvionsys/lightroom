@@ -14,9 +14,12 @@ import Link from "next/link";
 import { useQueryFunction } from "@/features/useQuery";
 import { getNotifications } from "@/services/NotificationsApi";
 import { INotification } from "@/types/notification.types";
+import useLogOut from "@/features/authMutations/useLogout";
+import Spinner from "./Spinner";
 
 export function Navbar_MT() {
   const { data: session } = useSession();
+  const { logOut, logOutPending } = useLogOut();
   const isLogin = Boolean(session?.user);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -53,8 +56,7 @@ export function Navbar_MT() {
   ];
 
   const handleOpen = () => setOpen((cur) => !cur);
-  const handleAuthAction = () =>
-    isLogin ? signOut() : router.push("/sign-in");
+  const handleAuthAction = () => (isLogin ? logOut() : router.push("/sign-in"));
 
   return (
     <MTNavbar
@@ -89,9 +91,13 @@ export function Navbar_MT() {
               </Link>
             ))}
           </div>
-          <div className="mt-6 mb-4 flex flex-col gap-2">
+          <div className="mt-6 mb-4 flex justify-center items-center gap-2">
             <button onClick={handleAuthAction}>
-              {isLogin ? "Log Out" : "Sign In"}
+              {logOutPending ? (
+                <Spinner />
+              ) : (
+                <>{isLogin ? "LogOut" : "SignIn"}</>
+              )}
             </button>
           </div>
         </div>
