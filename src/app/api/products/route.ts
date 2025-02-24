@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
       theUsers?.map(async (user) => {
         return await Notification.create({
           receiver: user?._id,
-          title: `New image added: ${newProduct?.name}`,
+          title: newProduct?.name,
           imageId: newProduct?._id,
           nexusId,
         });

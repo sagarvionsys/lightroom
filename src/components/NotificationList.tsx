@@ -16,48 +16,50 @@ import { formatDate } from "@/utils/formatDate";
 
 const NotificationList = ({ notes }: { notes: INotification }) => {
   const { title, createdAt, imageId, isRead, nexusId, receiver } = notes;
-
   const { markNotification, markNotificationPending } = useMarkNotification();
 
   return (
     <div
-      className={`flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between p-2 ${
+      className={`flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between p-3 ${
         isRead ? "bg-black" : "bg-gray-700"
-      } border border-gray-700 rounded-lg shadow-md `}
+      } border border-gray-700 rounded-lg shadow-md w-full`}
     >
-      <div className="flex items-center gap-4">
+      {/* Left Section: Icon & Text */}
+      <div className="flex items-start sm:items-center gap-3 w-full sm:w-auto">
         {imageId ? (
-          <Image className="text-purple-500" />
+          <Image className="text-purple-500 w-5 h-5 sm:w-6 sm:h-6" />
         ) : (
-          <Info className="text-blue-500" />
+          <Info className="text-blue-500 w-5 h-5 sm:w-6 sm:h-6" />
         )}
-        <div>
-          <p className="text-md text-white">{title}</p>
-          <p className="text-xs text-gray-200 mt-1">
+        <div className="flex-1">
+          <p className="text-sm sm:text-md text-white">{title}</p>
+          <p className="text-xs text-gray-400 mt-1">
             {formatDate(createdAt as string)}
           </p>
         </div>
       </div>
 
-      {/* Button with Loading State */}
-      <div className="flex justify-center items-center gap-4">
+      {/* Right Section: Buttons */}
+      <div className="flex flex-wrap justify-end sm:justify-center items-center gap-3 w-full sm:w-auto">
         {imageId && (
           <Link
             href={`product/${imageId}`}
-            className="bg-gray-100 hover:bg-white transition-colors text-black p-2 rounded-md flex items-center gap-2"
+            className="bg-gray-100 hover:bg-white transition-colors text-black p-2 rounded-md flex items-center gap-2 text-sm sm:text-base"
           >
             <SquareArrowOutUpRight />
           </Link>
         )}
         <button
-          className="bg-gray-100 hover:bg-white transition-colors text-black p-2 rounded-md flex items-center gap-2"
+          className="bg-gray-100 hover:bg-white transition-colors text-black p-2 rounded-md flex items-center gap-2 text-sm sm:text-base"
           disabled={markNotificationPending}
           onClick={() => markNotification({ nexusId, receiver })}
         >
           {markNotificationPending ? (
             <Spinner />
+          ) : isRead ? (
+            <MailCheck />
           ) : (
-            <>{isRead ? <MailCheck /> : <Mail />}</>
+            <Mail />
           )}
         </button>
       </div>
