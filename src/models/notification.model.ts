@@ -3,8 +3,11 @@ import { INotification } from "@/types/notification.types";
 
 const notificationSchema = new Schema<INotification>(
   {
-    title: { type: "string", required: true },
-    imageId: { type: "string" },
+    receiver: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    title: { type: String, required: true },
+    nexusId: { type: String, required: true },
+    imageId: { type: String },
+    isRead: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

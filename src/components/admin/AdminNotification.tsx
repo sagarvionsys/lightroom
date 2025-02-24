@@ -14,6 +14,7 @@ import { INotification } from "@/types/notification.types";
 const AdminNotification = () => {
   const [updateTitle, setUpdateTitle] = useState("");
   const [updateId, setUpdateId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data: notifications, isLoading } = useQueryFunction(
     ["notifications"],
@@ -81,8 +82,8 @@ const AdminNotification = () => {
             <NotificationSkeleton key={idx} />
           ))
         ) : notifications?.length ? (
-          notifications.map(
-            ({ _id, title, createdAt, imageId }: INotification) => (
+          notifications?.map(
+            ({ _id, title, createdAt, imageId, nexusId }: INotification) => (
               <div
                 key={_id as string}
                 className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 bg-white border border-gray-200 rounded-lg shadow-md"
@@ -114,10 +115,13 @@ const AdminNotification = () => {
                 <div className="flex gap-3">
                   <button
                     disabled={deleteNotificationPending}
-                    onClick={() => deleteNotification(_id as string)}
+                    onClick={() => {
+                      setDeleteId(nexusId);
+                      deleteNotification(nexusId);
+                    }}
                     className="border p-2 rounded-md hover:bg-slate-100 transition-all"
                   >
-                    {deleteNotificationPending ? (
+                    {deleteNotificationPending && deleteId === nexusId ? (
                       <Spinner />
                     ) : (
                       <Trash2 color="red" />
@@ -127,7 +131,7 @@ const AdminNotification = () => {
                     disabled={
                       createNotificationPending || updateNotificationPending
                     }
-                    onClick={() => handleEdit(_id as string, title)}
+                    onClick={() => handleEdit(nexusId, title)}
                     className="border p-2 rounded-md hover:bg-slate-100 transition-all"
                   >
                     <Edit2 color="blue" />

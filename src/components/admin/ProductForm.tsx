@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import FileUpload from "@/components/FileUpload";
 import { IKUploadResponse } from "imagekitio-next/dist/types/components/IKUpload/props";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import {
   IMAGE_VARIANTS,
   ImageVariant,
@@ -58,7 +58,7 @@ export default function AdminProductForm() {
     setValue("imageUrl", response.filePath);
 
   const onSubmit = async (data: ProductFormData) => {
-    addProduct(data, { onSettled: () => reset() });
+    addProduct(data, { onSuccess: () => reset() });
   };
 
   return (

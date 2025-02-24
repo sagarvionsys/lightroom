@@ -7,6 +7,8 @@ import React from "react";
 const AccountPage = () => {
   const { data: session } = useSession();
 
+  if (!session?.user.role) return null;
+
   return session?.user?.role === "admin" ? (
     <AdminLayout />
   ) : (

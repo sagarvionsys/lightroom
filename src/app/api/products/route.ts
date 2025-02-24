@@ -5,6 +5,9 @@ import dbConnect from "@/lib/db";
 import Product from "@/models/product.model";
 import { IProduct } from "@/types/product.types";
 import Notification from "@/models/notification.model";
+import User from "@/models/user.model";
+import { v4 as uuidv4 } from "uuid";
+import { IUser } from "@/types/user.types";
 
 export async function GET() {
   try {
@@ -43,14 +46,23 @@ export async function POST(req: NextRequest) {
 
     const newProduct = await Product.create(body);
 
-    // notification for new product
-    const newNotification = await Notification.create({
-      title: `New image added: ${newProduct?.name}`,
-      imageId: newProduct?._id,
-    });
+    const theUsers: IUser[] = await User.find({});
+    const nexusId = uuidv4();
 
-    return NextResponse.json({ newProduct, newNotification }, { status: 201 });
+    await Promise.all(
+      theUsers?.map(async (user) => {
+        return await Notification.create({
+          receiver: user?._id,
+          title: `New image added: ${newProduct?.name}`,
+          imageId: newProduct?._id,
+          nexusId,
+        });
+      })
+    );
+
+    return NextResponse.json({ newProduct }, { status: 201 });
   } catch (error) {
+    console.log(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

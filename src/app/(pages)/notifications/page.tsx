@@ -15,7 +15,7 @@ const NotificationsPage = () => {
   );
 
   return (
-    <div className="min-h-screen text-white flex flex-col items-center">
+    <div className=" text-white flex flex-col items-center">
       {/* Header */}
       <header className="w-full max-w-2xl flex items-center justify-between border-b border-gray-700 pb-4">
         <h1 className="text-2xl font-bold">Notifications</h1>
@@ -23,7 +23,7 @@ const NotificationsPage = () => {
       </header>
 
       {/* Notifications List */}
-      <section className="w-full max-w-2xl mt-6 space-y-4">
+      <section className="hideBar w-full max-w-2xl mt-6 space-y-4 max-h-[23rem] overflow-y-scroll">
         {isLoading &&
           Array.from({ length: 4 }).map((_, idx) => (
             <NotificationSkeleton key={idx} />
