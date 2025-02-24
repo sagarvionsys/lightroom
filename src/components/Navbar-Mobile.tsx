@@ -11,11 +11,9 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-
-interface NavItemProps {
-  children: React.ReactNode;
-  href?: string;
-}
+import { useQueryFunction } from "@/features/useQuery";
+import { getNotifications } from "@/services/NotificationsApi";
+import { INotification } from "@/types/notification.types";
 
 export function Navbar_MT() {
   const { data: session } = useSession();
@@ -24,13 +22,31 @@ export function Navbar_MT() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  // Fetch notifications
+  const { data: notifications } = useQueryFunction(
+    ["notifications"],
+    getNotifications
+  );
+  const hasUnread = notifications?.some((note: INotification) => !note?.isRead);
+
   const links = [
-    { title: "Home", icon: House, href: "/" },
+    { title: "Home", icon: <House />, href: "/" },
     ...(isLogin
       ? [
-          { title: "Notifications", icon: BellDot, href: "/notifications" },
-          { title: "Cart", icon: ShoppingCart, href: "/cart" },
-          { title: "Account", icon: CircleUser, href: "/account" },
+          {
+            title: "Notifications",
+            icon: (
+              <div className="relative">
+                <BellDot size={28} absoluteStrokeWidth />
+                {hasUnread && (
+                  <span className="absolute top-1 right-0.5 w-3 h-3 bg-red-500 rounded-full"></span>
+                )}
+              </div>
+            ),
+            href: "/notifications",
+          },
+          { title: "Cart", icon: <ShoppingCart />, href: "/cart" },
+          { title: "Account", icon: <CircleUser />, href: "/account" },
         ]
       : []),
   ];
@@ -58,15 +74,15 @@ export function Navbar_MT() {
       </div>
 
       <Collapse open={open}>
-        <div className="container mx-auto mt-3 border-t border-gray-200 px-2 pt-4">
+        <div className="container mx-auto mt-3 border-y border-gray-200 px-2 pt-4">
           <div className="flex flex-col gap-4 justify-start">
-            {links.map(({ title, icon: Icon, href }) => (
+            {links.map(({ title, icon, href }) => (
               <Link
                 href={href || "/"}
                 className="flex gap-2 font-medium text-white"
               >
                 <div className="w-full flex items-center gap-3">
-                  <Icon />
+                  {icon}
                   <span className="text-sm">{title}</span>
                 </div>
               </Link>

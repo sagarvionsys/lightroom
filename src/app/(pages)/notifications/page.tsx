@@ -20,9 +20,9 @@ const NotificationsPage = () => {
   const { data: session } = useSession();
 
   return (
-    <div className=" text-white flex flex-col items-center">
+    <div className=" text-white flex flex-col items-center px-3">
       {/* Header */}
-      <header className="w-full max-w-2xl flex items-center justify-between border-b border-gray-700 pb-4">
+      <header className="w-full max-w-2xl flex  items-center justify-between border-b border-gray-700 pb-4">
         <h1 className="text-2xl font-bold">Notifications</h1>
         <div className="flex justify-center items-center gap-3">
           <button

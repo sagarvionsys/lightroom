@@ -21,7 +21,7 @@ const NotificationList = ({ notes }: { notes: INotification }) => {
 
   return (
     <div
-      className={`flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 ${
+      className={`flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between p-2 ${
         isRead ? "bg-black" : "bg-gray-700"
       } border border-gray-700 rounded-lg shadow-md `}
     >

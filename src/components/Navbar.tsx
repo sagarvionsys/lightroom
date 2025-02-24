@@ -24,8 +24,7 @@ export function Navbar() {
     ["notifications"],
     getNotifications
   );
-
-  const hasUnread = notifications?.some((note: INotification) => !note.isRead);
+  const hasUnread = notifications?.some((note: INotification) => !note?.isRead);
 
   const links = [
     {
