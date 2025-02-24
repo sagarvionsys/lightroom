@@ -20,11 +20,13 @@ export function Navbar() {
   const isLogin = session?.user;
 
   // Fetch notifications
-  const { data: notifications } = useQueryFunction(
+  const { data: notifications = [] } = useQueryFunction(
     ["notifications"],
     getNotifications
   );
-  const hasUnread = notifications?.some((note: INotification) => !note?.isRead);
+  const hasUnread = Array.isArray(notifications)
+    ? notifications?.some((note: INotification) => !note?.isRead)
+    : false;
 
   const links = [
     {

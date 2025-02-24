@@ -1,33 +1,29 @@
 "use client";
+
 import React from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
-import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import useLogin from "@/features/authMutations/useLogin";
+import Spinner from "@/components/Spinner";
 
 const SignInForm = () => {
+  const { login, loginPending } = useLogin();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = {
-      email: formData.get("email")?.toString() || "",
-      password: formData.get("password")?.toString() || "",
-    };
-    const result = await signIn("credentials", {
-      email: data.email,
-      password: data.password,
-      redirect: false,
-    });
-    if (result?.error) toast.error(result.error);
-    if (result?.ok) {
-      toast.success("Login successful");
-      router.push("/");
-    }
+    const email = formData.get("email")?.toString() || "";
+    const password = formData.get("password")?.toString() || "";
+    login(
+      { email, password },
+      {
+        onSuccess: () => router.push("/"),
+      }
+    );
   };
 
   return (
@@ -57,10 +53,11 @@ const SignInForm = () => {
         </LabelInputContainer>
 
         <button
-          className="bg-gradient-to-br relative group/btn from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+          className="bg-gradient-to-br relative group/btn items-center from-black dark:from-zinc-900 dark:to-zinc-900 to-neutral-600 block dark:bg-zinc-800 w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
           type="submit"
         >
-          Sign In &rarr;
+          {!loginPending ? <Spinner /> : "Sign In"}
+
           <BottomGradient />
         </button>
       </form>

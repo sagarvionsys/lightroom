@@ -18,16 +18,17 @@ import { INotification } from "@/types/notification.types";
 export function Navbar_MT() {
   const { data: session } = useSession();
   const isLogin = Boolean(session?.user);
-
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  // Fetch notifications
-  const { data: notifications } = useQueryFunction(
+  const { data: notifications = [] } = useQueryFunction(
     ["notifications"],
     getNotifications
   );
-  const hasUnread = notifications?.some((note: INotification) => !note?.isRead);
+
+  const hasUnread = Array.isArray(notifications)
+    ? notifications?.some((note: INotification) => !note?.isRead)
+    : false;
 
   const links = [
     { title: "Home", icon: <House />, href: "/" },
@@ -65,7 +66,6 @@ export function Navbar_MT() {
       onPointerLeaveCapture={() => {}}
     >
       <div className="flex items-center justify-between p-4">
-        {/* Updated Typography to h1 */}
         <h1 className="text-2xl font-bold text-white">LightRoom</h1>
 
         <button onClick={handleOpen}>
@@ -76,8 +76,9 @@ export function Navbar_MT() {
       <Collapse open={open}>
         <div className="container mx-auto mt-3 border-y border-gray-200 px-2 pt-4">
           <div className="flex flex-col gap-4 justify-start">
-            {links.map(({ title, icon, href }) => (
+            {links.map(({ title, icon, href }, index) => (
               <Link
+                key={index}
                 href={href || "/"}
                 className="flex gap-2 font-medium text-white"
               >
