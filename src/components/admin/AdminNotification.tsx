@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import Link from "next/link";
-import { Edit2, Image, Info, Trash2 } from "lucide-react";
+import {
+  Edit2,
+  Image,
+  Info,
+  SquareArrowOutUpRight,
+  Trash2,
+} from "lucide-react";
 import Spinner from "../Spinner";
 import { NotificationSkeleton } from "../Skeletons";
 
@@ -10,6 +16,7 @@ import useUpdateNotification from "@/features/notificationMutations/useUpdateNot
 import { useQueryFunction } from "@/features/useQuery";
 import { getNotifications } from "@/services/NotificationsApi";
 import { INotification } from "@/types/notification.types";
+import { formatDate } from "@/utils/formatDate";
 
 const AdminNotification = () => {
   const [updateTitle, setUpdateTitle] = useState("");
@@ -47,7 +54,7 @@ const AdminNotification = () => {
   };
 
   return (
-    <div className="w-full max-w-xl mt-6 space-y-4 p-2">
+    <div className="w-full max-w-xl mt-6 space-y-4 p-2 hideBar">
       {/* Input & Add/Update Button */}
       <div className="w-full pb-4 flex justify-center items-center gap-3">
         <input
@@ -76,7 +83,7 @@ const AdminNotification = () => {
       </div>
 
       {/* Notifications List */}
-      <div className="space-y-3">
+      <div className="space-y-3 max-h-[20rem] overflow-y-scroll hideBar">
         {isLoading ? (
           Array.from({ length: 4 }).map((_, idx) => (
             <NotificationSkeleton key={idx} />
@@ -97,29 +104,28 @@ const AdminNotification = () => {
                   <div>
                     <p className="text-md text-gray-800">{title}</p>
                     <p className="text-xs text-gray-600 mt-1">
-                      Date: {createdAt}
+                      {formatDate(createdAt as string)}
                     </p>
                   </div>
                 </div>
 
-                {imageId && (
-                  <Link
-                    href={`product/${imageId}`}
-                    className="text-md text-primary-500 hover:underline mt-2 sm:mt-0"
-                  >
-                    View
-                  </Link>
-                )}
-
                 {/* Action Buttons */}
                 <div className="flex gap-3">
+                  {imageId && (
+                    <Link
+                      href={`product/${imageId}`}
+                      className="bg-gray-100 hover:bg-white transition-colors text-black p-2 rounded-md flex items-center gap-2"
+                    >
+                      <SquareArrowOutUpRight />
+                    </Link>
+                  )}
                   <button
                     disabled={deleteNotificationPending}
                     onClick={() => {
                       setDeleteId(nexusId);
                       deleteNotification(nexusId);
                     }}
-                    className="border p-2 rounded-md hover:bg-slate-100 transition-all"
+                    className="border p-2 rounded-md bg-gray-100 hover:bg-white transition-colors"
                   >
                     {deleteNotificationPending && deleteId === nexusId ? (
                       <Spinner />
@@ -132,7 +138,7 @@ const AdminNotification = () => {
                       createNotificationPending || updateNotificationPending
                     }
                     onClick={() => handleEdit(nexusId, title)}
-                    className="border p-2 rounded-md hover:bg-slate-100 transition-all"
+                    className="border p-2 rounded-md bg-gray-100 hover:bg-white transition-colors"
                   >
                     <Edit2 color="blue" />
                   </button>

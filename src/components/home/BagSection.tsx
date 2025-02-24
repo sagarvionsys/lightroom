@@ -4,6 +4,7 @@ import { IKImage } from "imagekitio-next";
 import { Download } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/moving-border";
+import { formatDate } from "@/utils/formatDate";
 
 const BagSection = ({ items }: any) => {
   return (
@@ -37,9 +38,7 @@ const BagSection = ({ items }: any) => {
                       <p className="font-semibold text-sm text-neutral-400">
                         Order Date
                       </p>
-                      <p className="text-lg">
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </p>
+                      <p className="text-lg">{formatDate(order.createdAt)}</p>
                     </div>
                     <div className="flex flex-col">
                       <p className="font-semibold text-sm text-neutral-400">

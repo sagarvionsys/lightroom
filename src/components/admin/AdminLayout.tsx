@@ -23,7 +23,7 @@ const AdminLayout = () => {
 
   return (
     <>
-      <div className="flex items-center">
+      <div className="flex items-center ">
         <button
           onClick={() => setModalOpen(!ModalOpen)}
           className="shadow-[0_0_0_3px_#000000_inset]  m-2 flex gap-2 items-end px-3 py-2 bg-transparent border border-white text-white rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
@@ -39,7 +39,7 @@ const AdminLayout = () => {
           Notification
         </button>
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 px-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4 px-4 hideBar">
         {productIsLoading
           ? Array(4)
               .fill(null)

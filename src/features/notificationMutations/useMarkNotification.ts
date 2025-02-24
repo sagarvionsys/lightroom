@@ -10,7 +10,7 @@ const useMarkNotification = () => {
       receiver,
       nexusId,
     }: {
-      receiver: mongoose.Types.ObjectId;
+      receiver: mongoose.Types.ObjectId | string;
       nexusId: string;
     }) => markNotifications({ receiver, nexusId }),
     onSuccess: () => {

@@ -34,7 +34,7 @@ export const markNotifications = async ({
   receiver,
   nexusId,
 }: {
-  receiver: mongoose.Types.ObjectId;
+  receiver: mongoose.Types.ObjectId | string;
   nexusId: string;
 }) => {
   const response = await axios.put(

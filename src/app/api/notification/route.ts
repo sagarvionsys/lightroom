@@ -64,7 +64,9 @@ export async function GET() {
     if (!session) await dbConnect();
     const allNotifications = await Notification.find({
       receiver: session?.user.id,
-    });
+    })
+      .sort({ createdAt: 1 })
+      .lean();
 
     return NextResponse.json(allNotifications, { status: 200 });
   } catch (error) {
@@ -166,27 +168,38 @@ export async function PUT(req: NextRequest) {
     const receiver = searchParams.get("receiver");
     const nexusId = searchParams.get("nexusId");
 
-    if (!receiver || !nexusId) {
+    if (!receiver) {
       return NextResponse.json(
-        { error: "Notification not found" },
+        { error: "Notification with receiver not found" },
         { status: 404 }
       );
     }
 
-    // Fetch notification first
-    const notification = await Notification.findOne({ nexusId, receiver });
+    if (nexusId) {
+      const notification = await Notification.findOne({ nexusId, receiver });
 
-    if (!notification) {
-      return NextResponse.json(
-        { error: "Notification not found" },
-        { status: 404 }
+      if (!notification) {
+        return NextResponse.json(
+          { error: "Notification not found" },
+          { status: 404 }
+        );
+      }
+
+      notification.isRead = !notification.isRead;
+      await notification.save();
+    } else {
+      await Notification.updateMany(
+        { receiver },
+        {
+          isRead: true,
+        }
       );
     }
 
-    notification.isRead = !notification.isRead;
-    await notification.save();
-
-    return NextResponse.json(notification, { status: 200 });
+    return NextResponse.json(
+      { message: "notification updated" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error updating notification:", error);
     return NextResponse.json(
