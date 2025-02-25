@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 const useVerifyVoucher = () => {
   const { mutate, isPending, isError } = useMutation({
     mutationFn: (code: FormDataEntryValue | null) => verifyVoucher(code),
-    onSuccess: () => toast.success("Voucher is added"),
+    onSuccess: () => toast.success("Voucher is verified"),
     onError: (err: any) => toast.error(err.response.data.error),
   });
   return {

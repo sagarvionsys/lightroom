@@ -1,3 +1,5 @@
+import { formatDate } from "@/utils/formatDate";
+
 export const successEmailTemplate = (order: any) => `
 <!DOCTYPE html>
 <html>
@@ -55,7 +57,7 @@ export const successEmailTemplate = (order: any) => `
         <p>Hi ${order.userId.userName},</p>
         <p>Thank you for your purchase from <b>LightRoom</b>. We are excited to deliver your selected image(s)!</p>
         <p><b>Order Name: </b>${order.name}</p>
-        <p><b>Order Date: </b>${order.createdAt}</p>
+        <p><b>Order Date: </b>${formatDate(order.createdAt)}</p>
         <p><b>Order ID: </b>#${order?._id?.toString().slice(-6)}</p>
         <p><b>Transaction Amount: </b>${order.amount}</p>
         <p>You can download your purchased image(s) from your account.</p>
@@ -127,7 +129,7 @@ export const failedEmailTemplate = (order: any) => `
        <p>Hi ${order.userId.userName},</p>
         <p>We regret to inform you that your recent payment attempt on <b>LightRoom</b> was unsuccessful.</p>
         <p><b>Order Name: </b>${order.name}</p>
-          <p><b>Order Date: </b>${order.createdAt}</p>
+          <p><b>Order Date: </b>${formatDate(order.createdAt)}</p>
         <p><b>Order ID: </b>#${order?._id?.toString().slice(-6)}</p>
         <p><b>Transaction Amount: </b>${order.amount}</p>
         <p>Please check your payment details and try again. If the issue persists, feel free to contact our support team for assistance.</p>
