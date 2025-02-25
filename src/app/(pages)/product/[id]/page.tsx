@@ -192,12 +192,12 @@ const Product = () => {
 
       {/* Purchase Modal */}
       <Modal
-        width={800}
+        width={600}
         open={purchaseModal}
         onCancel={() => setPurchaseModal(false)}
         footer={null}
       >
-        <div className="space-y-6">
+        <div className="space-y-3">
           <ItemPreview variant={selectedVariant} product={productData} />
           <CheckOut variant={selectedVariant} product={productData} />
         </div>

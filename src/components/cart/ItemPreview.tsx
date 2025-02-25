@@ -10,14 +10,15 @@ const ItemPreview = ({ variant, product }: { variant: any; product: any }) => {
   const variantDimensions =
     IMAGE_VARIANTS[variant.type.toUpperCase() as keyof typeof IMAGE_VARIANTS]
       .dimensions;
+
   return (
     <>
-      <div className="rounded-lg border p-4 shadow-sm border-gray-700 bg-gray-800 md:p-6">
-        <div className="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
+      <div className=" bg-white p-4 ">
+        <div className="space-y-4 md:flex md:items-center md:gap-6 md:space-y-0">
           <div
             className="relative rounded-lg overflow-hidden bg-neutral-focus"
             style={{
-              width: "120px",
+              width: "150px",
               aspectRatio: `${variantDimensions.width} / ${variantDimensions.height}`,
             }}
           >
@@ -43,7 +44,7 @@ const ItemPreview = ({ variant, product }: { variant: any; product: any }) => {
             <div>
               <Link
                 href={`product/${p._id}`}
-                className="text-xl font-medium text-white hover:underline"
+                className="text-xl font-medium text-black hover:underline"
               >
                 {product?.name}
               </Link>

@@ -1,7 +1,7 @@
 import React from "react";
 
 const VoucherForm = () => {
-  return <div>this features is in progress</div>;
+  return <div className="text-red-600">This features is in progress!</div>;
 };
 
 export default VoucherForm;

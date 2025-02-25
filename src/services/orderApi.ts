@@ -1,13 +1,24 @@
 import { ImageVariant } from "@/types/product.types";
 import axios from "axios";
-import { ObjectId } from "mongoose";
 
 export interface IAddOrder {
-  productId: string;
+  voucherAmount: number;
+  productId?: string;
+  voucherId?: string;
   variant: ImageVariant;
 }
-export const addOrderApi = async ({ productId, variant }: IAddOrder) => {
-  const response = await axios.post("/api/orders", { productId, variant });
+export const addOrderApi = async ({
+  productId,
+  variant,
+  voucherAmount,
+  voucherId,
+}: IAddOrder) => {
+  const response = await axios.post("/api/orders", {
+    productId,
+    variant,
+    voucherAmount,
+    voucherId,
+  });
   return response.data;
 };
 

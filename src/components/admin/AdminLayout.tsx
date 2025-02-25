@@ -43,7 +43,7 @@ const AdminLayout = () => {
           Notification
         </button>
         <button
-          onClick={() => setNotificationModalOpen(!NotificationModalOpen)}
+          onClick={() => setVoucherModal(!VoucherModal)}
           className="w-full sm:w-auto shadow-[0_0_0_3px_#000000_inset] m-2 flex gap-2 items-center px-2 py-2 bg-transparent border border-white text-white rounded-lg font-bold transform hover:-translate-y-1 transition duration-400"
         >
           <IconNotification />

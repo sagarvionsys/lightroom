@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const theVoucher: IVoucher | null = await Voucher.findOne(
       { code },
-      "isActive name amount"
+      "isActive name amount _id"
     );
 
     if (!theVoucher) {

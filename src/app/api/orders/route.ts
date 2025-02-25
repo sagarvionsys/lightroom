@@ -2,6 +2,7 @@ import { authOptions } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import { razorInstance } from "@/lib/razorInstance";
 import Order from "@/models/order.model";
+import Voucher from "@/models/voucher.model";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +15,7 @@ export async function POST(rea: NextRequest) {
         { status: 401 }
       );
 
-    const { productId, variant } = await rea.json();
+    const { productId, variant, voucherAmount, voucherId } = await rea.json();
     if (!productId || !variant)
       return NextResponse.json(
         { error: "product with variant needed." },
@@ -22,9 +23,9 @@ export async function POST(rea: NextRequest) {
       );
 
     await dbConnect();
-
+    const ProductPrice = variant?.price - voucherAmount;
     const order = await razorInstance.orders.create({
-      amount: Math.round(variant.price * 100),
+      amount: Math.round(ProductPrice * 100),
       currency: "INR",
       receipt: `receipt-${Date.now()}`,
       notes: {
@@ -38,9 +39,18 @@ export async function POST(rea: NextRequest) {
       productId,
       variant,
       razorpayOrderId: order.id,
-      amount: variant.price,
+      amount: ProductPrice,
       status: "pending",
     });
+
+    if (voucherAmount > 0) {
+      await Voucher.findOneAndUpdate(
+        { _id: voucherId },
+        {
+          $inc: { voucherNumber: -1 },
+        }
+      );
+    }
 
     return NextResponse.json({
       orderId: order.id,

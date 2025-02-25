@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
         { error: "Unauthorized Access" },
         { status: 401 }
       );
+
     const { name, code, amount, voucherNumber } = await req.json();
 
     if (!name || !code || !amount || !voucherNumber)
@@ -50,11 +51,11 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    // if (!session)
-    //   return NextResponse.json(
-    //     { error: "Unauthorized Access" },
-    //     { status: 401 }
-    //   );
+    if (!session)
+      return NextResponse.json(
+        { error: "Unauthorized Access" },
+        { status: 401 }
+      );
 
     await dbConnect();
     const allVouchers = await Voucher.find().lean();
