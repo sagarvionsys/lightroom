@@ -1,21 +1,21 @@
 "use client";
 
-import useChatAction from "@/actions/useChatAction";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send } from "lucide-react";
+import useAi from "@/features/authMutations/useAi";
+import Spinner from "../Spinner";
 
 interface ChatMessage {
-  AI: string | null;
+  AI: string | undefined;
   USER: string;
 }
 
 const AIModel: React.FC = () => {
+  const { askAi, askAiLoading } = useAi();
   const [messages, setMessages] = useState<ChatMessage[]>([
     { AI: "Hello! How can I assist you today?", USER: "" },
   ]);
-  const [loading, setLoading] = useState(false);
-
   const handleAskQuestion = async (form: FormData) => {
     const input = form.get("userInput") as string;
     if (!input) return;
@@ -25,14 +25,17 @@ const AIModel: React.FC = () => {
       { USER: input, AI: "loading..." },
     ]);
 
-    setLoading(true);
-    const { aiChat } = await useChatAction(input);
-    setLoading(false);
-
-    setMessages((prevMessages) => {
-      const newMessages = [...prevMessages];
-      newMessages[newMessages.length - 1] = { USER: input, AI: aiChat };
-      return newMessages;
+    askAi(input, {
+      onSettled: (res) => {
+        setMessages((prevMessages) => {
+          const newMessages = [...prevMessages];
+          newMessages[newMessages.length - 1] = {
+            USER: input,
+            AI: res?.aiChat,
+          };
+          return newMessages;
+        });
+      },
     });
   };
 
@@ -96,15 +99,11 @@ const AIModel: React.FC = () => {
             placeholder="Ask me anything..."
           />
           <button
+            disabled={askAiLoading}
             className="bg-blue-500 p-2 rounded-lg text-white hover:bg-blue-600 transition flex items-center justify-center"
             type="submit"
-            disabled={loading}
           >
-            {loading ? (
-              <span className="animate-pulse">...</span>
-            ) : (
-              <Send size={18} />
-            )}
+            {askAiLoading ? <Spinner /> : <Send size={18} />}
           </button>
         </form>
       </section>
