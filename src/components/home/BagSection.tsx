@@ -5,6 +5,7 @@ import { Download } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/moving-border";
 import { formatDate } from "@/utils/formatDate";
+import { downloadImage } from "@/utils/downloadUrl";
 
 const BagSection = ({ items }: any) => {
   return (
@@ -98,23 +99,23 @@ const BagSection = ({ items }: any) => {
                         </div>
 
                         {order?.status === "completed" && (
-                          <a
-                            href={`${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}/tr:q-100,w-${variantDimensions.width},h-${variantDimensions.height},cm-extract,fo-center/${product.imageUrl}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn btn-primary gap-2 flex"
-                            download={`image-${order?._id
-                              ?.toString()
-                              .slice(-6)}.jpg`}
+                          <Button
+                            onClick={async () => {
+                              const url = `${process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT}/tr:q-100,w-${variantDimensions.width},h-${variantDimensions.height},cm-extract,fo-center/${product.imageUrl}`;
+                              const productName =
+                                product?.name +
+                                "_" +
+                                variantDimensions?.width +
+                                "x" +
+                                variantDimensions?.height;
+                              downloadImage(url, productName);
+                            }}
+                            borderRadius="0.5rem"
+                            className="bg-slate-900 gap-3 flex text-white border-slate-600"
                           >
-                            <Button
-                              borderRadius="0.5rem"
-                              className="bg-slate-900 gap-3 flex text-white border-slate-600"
-                            >
-                              <Download />
-                              Download
-                            </Button>
-                          </a>
+                            <Download />
+                            Download
+                          </Button>
                         )}
                       </div>
                     </div>
