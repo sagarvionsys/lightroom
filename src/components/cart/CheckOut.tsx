@@ -11,37 +11,31 @@ import { useSession } from "next-auth/react";
 import { addOrderApi } from "@/services/orderApi";
 import { useRouter } from "next/navigation";
 
-const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
+interface Voucher {
+  name: string;
+  amount: number;
+  _id: string;
+}
+
+interface CheckOutProps {
+  variant: any;
+  product: any;
+}
+
+const CheckOut: React.FC<CheckOutProps> = ({ variant, product }) => {
   const router = useRouter();
   const { data: session } = useSession();
   const { verifyVoucher, verifyVoucherPending } = useVerifyVoucher();
 
-  const totalBill = variant?.price || 0;
-  const [voucherName, setVoucherName] = useState<string>("");
-  const [voucherAmount, setVoucherAmount] = useState<number>(0);
-  const [voucherId, setVoucherId] = useState<string>("");
-  const [totalAmount, setTotalAmount] = useState<number>(totalBill);
+  const totalBill: number = variant?.price || 0;
+  const [voucher, setVoucher] = useState<Voucher | null>(null);
 
   // Handle verifying voucher
   const handleVoucher = (data: FormData) => {
     const code = data.get("voucher") as string;
     verifyVoucher(code, {
-      onSuccess: (res) => {
-        const { name, amount, _id } = res.voucher;
-        setVoucherName(name);
-        setVoucherAmount(amount);
-        setVoucherId(_id);
-
-        setTotalAmount(totalBill - amount);
-      },
+      onSuccess: ({ voucher }: { voucher: Voucher }) => setVoucher(voucher),
     });
-  };
-
-  // Handle resetting voucher
-  const resetVoucher = () => {
-    setVoucherName("");
-    setVoucherAmount(0);
-    setTotalAmount(totalBill);
   };
 
   // Handle purchase action
@@ -51,39 +45,36 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
       return;
     }
 
-    if (variant)
-      try {
-        const data = await addOrderApi({
-          productId: product?._id,
-          variant,
-          voucherAmount,
-          voucherId,
-        });
+    try {
+      const data = await addOrderApi({
+        productId: product?._id,
+        variant,
+        voucherAmount: voucher?.amount || 0,
+        voucherId: voucher?._id || "",
+      });
 
-        const { orderId, amount } = data;
-        const rzpOptions = {
-          key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-          amount: amount,
-          currency: "INR",
-          name: "LightRoom Shop",
-          description: `${product?.name} - ${variant?.type} Version`,
-          order_id: orderId,
-          handler: () => {
-            toast.success("Payment successful!");
-            router.push("/account");
-          },
-          prefill: {
-            email: session.user.email,
-          },
-        };
-
-        const rzp = new (window as any).Razorpay(rzpOptions);
-        rzp.open();
-      } catch (error) {
-        console.error("Purchase failed:", error);
-        toast.error("Purchase failed. Please try again.");
-      }
+      const { orderId, amount } = data;
+      const rzp = new (window as any).Razorpay({
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount,
+        currency: "INR",
+        name: "LightRoom Shop",
+        description: `${product?.name} - ${variant?.type} Version`,
+        order_id: orderId,
+        handler: () => {
+          toast.success("Payment successful!");
+          router.push("/account");
+        },
+        prefill: { email: session.user.email },
+      });
+      rzp.open();
+    } catch (error) {
+      console.error("Purchase failed:", error);
+      toast.error("Purchase failed. Please try again.");
+    }
   };
+
+  const totalAmount: number = totalBill - (voucher?.amount || 0);
 
   return (
     <div className="max-w-5xl space-y-6 sm:p-6 md:w-full">
@@ -92,7 +83,6 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
         <p className="text-xl font-semibold text-black">Order Summary</p>
 
         <div className="space-y-4">
-          {/* Original Price */}
           <dl className="flex items-center justify-between">
             <dt className="text-base text-gray-800">Original price</dt>
             <dd className="text-base font-medium text-gray-500">
@@ -100,15 +90,14 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
             </dd>
           </dl>
 
-          {/* Voucher Applied */}
-          {voucherName && (
+          {voucher && (
             <dl className="flex items-center justify-between">
               <dt className="text-base text-gray-500">Voucher</dt>
               <dd className="flex items-center text-red-600 gap-2">
-                - {toINR(voucherAmount)}
+                - {toINR(voucher.amount)}
                 <span className="text-sm bg-gray-200 text-black px-2 py-1 rounded-lg flex items-center gap-2">
-                  <p>{voucherName}</p>
-                  <button onClick={resetVoucher}>
+                  <p>{voucher.name}</p>
+                  <button onClick={() => setVoucher(null)}>
                     <X size={12} />
                   </button>
                 </span>
@@ -116,13 +105,13 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
             </dl>
           )}
 
-          {/* Savings */}
           <dl className="flex items-center justify-between">
             <dt className="text-base text-gray-600">Savings</dt>
-            <dd className="text-base text-green-600">{toINR(voucherAmount)}</dd>
+            <dd className="text-base text-green-600">
+              {toINR(voucher?.amount || 0)}
+            </dd>
           </dl>
 
-          {/* Total Amount */}
           <dl className="flex items-center justify-between border-t pt-2 border-gray-300">
             <dt className="text-lg font-bold text-black">Total</dt>
             <dd className="text-lg font-bold text-black">
@@ -131,7 +120,6 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
           </dl>
         </div>
 
-        {/* Checkout Button */}
         <button
           onClick={handlePurchase}
           className="w-full rounded-lg bg-blue-500 px-5 py-3 text-white text-lg font-semibold transition hover:bg-blue-600 focus:ring-4 focus:ring-blue-300"
@@ -139,7 +127,6 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
           Proceed to Checkout
         </button>
 
-        {/* Continue Shopping Link */}
         <div className="flex items-center justify-center gap-2 pt-2">
           <span className="text-sm text-gray-500">or</span>
           <Link
@@ -174,7 +161,7 @@ const CheckOut = ({ variant, product }: { variant: any; product: any }) => {
           <button
             disabled={verifyVoucherPending}
             type="submit"
-            className="w-full flex justify-center rounded-lg bg-green-500 px-5 text-center py-2.5 text-white font-semibold transition hover:bg-green-600 focus:ring-4 focus:ring-green-600"
+            className="w-full flex justify-center rounded-lg bg-green-500 px-5 py-2.5 text-white font-semibold transition hover:bg-green-600 focus:ring-4 focus:ring-green-600"
           >
             {verifyVoucherPending ? <Spinner /> : "Apply Code"}
           </button>
